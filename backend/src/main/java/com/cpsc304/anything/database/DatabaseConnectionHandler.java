@@ -21,6 +21,8 @@ public class DatabaseConnectionHandler {
 
     private Connection connection = null;
 
+    private DatabaseConnectionHandler handlerInstance = null;
+
     public DatabaseConnectionHandler() {
         try {
             // Load the Oracle JDBC driver
@@ -35,6 +37,7 @@ public class DatabaseConnectionHandler {
         try {
             if (connection != null) {
                 connection.close();
+                System.out.println("Closed connection to Oracle.");
             }
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
