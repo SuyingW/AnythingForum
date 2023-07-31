@@ -1,11 +1,9 @@
 package com.cpsc304.anything.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.cpsc304.anything.models.User;
+import com.cpsc304.anything.util.PrintablePreparedStatement;
+
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -41,45 +39,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void deleteBranch(int branchId) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-            ps.setInt(1, branchId);
-
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
-            }
-
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
-
-    public void updateBranch(int id, String name) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE branch SET branch_name = ? WHERE branch_id = ?");
-            ps.setString(1, name);
-            ps.setInt(2, id);
-
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
-            }
-
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
-
     public boolean login(String username, String password) {
         try {
             if (connection != null) {
@@ -97,6 +56,109 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public void databaseSetup() {
+        dropUserTableIfExists();
+
+        try {
+            String query = "CREATE TABLE forumUser (userID varchar2(50) PRIMARY KEY, userName varchar2(50) NOT NULL, email varchar2(50) NOT NULL, userPassWord varchar(50) NOT NULL)";
+            PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        User user1 = new User("suying", "suying@suying.com", "ndlgf");
+        insertUser(user1);
+
+    }
+
+    public void insertUser(User user) {
+        try {
+            String query = "INSERT INTO forumUser VALUES (?,?,?,?)";
+            PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+            ps.setString(1, user.getUserID());
+            //ps.setDate(2, (Date) user.getRegistrationDate());
+            ps.setString(2, user.getUserName());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getUserPassword());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public User[] getUserInfo() {
+        ArrayList<User> result = new ArrayList<User>();
+
+        try {
+            String query = "SELECT * FROM forumUser";
+            PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                User user = new User(
+                        rs.getString("userName"),
+                        rs.getString("email"),
+                        rs.getString("userPassword"));
+
+                result.add(user);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new User[result.size()]);
+    }
+
+//    public void deleteBranch(int branchId) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
+//            ps.setInt(1, branchId);
+//
+//            int rowCount = ps.executeUpdate();
+//            if (rowCount == 0) {
+//                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
+//            }
+//
+//            connection.commit();
+//
+//            ps.close();
+//        } catch (SQLException e) {
+//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+//            rollbackConnection();
+//        }
+//    }
+
+//    public void updateBranch(int id, String name) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("UPDATE branch SET branch_name = ? WHERE branch_id = ?");
+//            ps.setString(1, name);
+//            ps.setInt(2, id);
+//
+//            int rowCount = ps.executeUpdate();
+//            if (rowCount == 0) {
+//                System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
+//            }
+//
+//            connection.commit();
+//
+//            ps.close();
+//        } catch (SQLException e) {
+//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+//            rollbackConnection();
+//        }
+//    }
+
+
     private void rollbackConnection() {
         try  {
             connection.rollback();
@@ -105,26 +167,15 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void databaseSetup() {
-        dropBranchTableIfExists();
 
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)");
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
-    private void dropBranchTableIfExists() {
+    private void dropUserTableIfExists() {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select table_name from user_tables");
 
             while(rs.next()) {
-                if(rs.getString(1).toLowerCase().equals("branch")) {
-                    stmt.execute("DROP TABLE branch");
+                if(rs.getString(1).toLowerCase().equals("forumuser")) {
+                    stmt.execute("DROP TABLE forumUser");
                     break;
                 }
             }
@@ -135,4 +186,6 @@ public class DatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
+
+
 }
