@@ -1,5 +1,7 @@
 package com.cpsc304.anything.database;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,8 +23,6 @@ public class DatabaseConnectionHandler {
 
     private Connection connection = null;
 
-    private DatabaseConnectionHandler handlerInstance = null;
-
     public DatabaseConnectionHandler() {
         try {
             // Load the Oracle JDBC driver
@@ -39,6 +39,22 @@ public class DatabaseConnectionHandler {
                 connection.close();
                 System.out.println("Closed connection to Oracle.");
             }
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    public void getTableNames() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select table_name from user_tables");
+
+            while(rs.next()) {
+                System.out.println(rs.getString(1));
+            }
+
+            rs.close();
+            stmt.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -83,7 +99,11 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public boolean login(String username, String password) {
+    public void login() {
+        Dotenv dotenv = Dotenv.load();
+        String username = dotenv.get("ORACLE_USERNAME");
+        String password = dotenv.get("ORACLE_PASSWORD");
+
         try {
             if (connection != null) {
                 connection.close();
@@ -93,10 +113,8 @@ public class DatabaseConnectionHandler {
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");
-            return true;
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            return false;
         }
     }
 
