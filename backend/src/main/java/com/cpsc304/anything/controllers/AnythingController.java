@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.Map;
 
@@ -19,5 +21,10 @@ public class AnythingController {
     public Map<String, String> test() {
         handler.getTableNames();
         return Collections.singletonMap("success", "true");
+    }
+
+    @PostMapping("/login")
+    public Map<String, String> userLogin(String email, String password) {
+        return Collections.singletonMap("username", handler.userLogin(email, password));
     }
 }
