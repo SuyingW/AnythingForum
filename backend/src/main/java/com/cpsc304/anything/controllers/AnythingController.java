@@ -1,18 +1,13 @@
-package com.cpsc304.anything.contollers;
+package com.cpsc304.anything.controllers;
 
-import com.cpsc304.anything.database.DatabaseConfig;
 import com.cpsc304.anything.database.DatabaseConnectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:9000")
 @RestController
 public class AnythingController {
     @Autowired private DatabaseConnectionHandler handler;
@@ -24,7 +19,7 @@ public class AnythingController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> userLogin(String email, String password) {
-        return Collections.singletonMap("username", handler.userLogin(email, password));
+    public Map<String, String> userLogin(@RequestBody UserRequest user) {
+        return Collections.singletonMap("username", handler.userLogin(user.email, user.password));
     }
 }

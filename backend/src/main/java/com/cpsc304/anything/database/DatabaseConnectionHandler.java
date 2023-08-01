@@ -60,6 +60,30 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public String userLogin(String email, String password) {
+        try {
+            System.out.println(email);
+            System.out.println(password);
+            PreparedStatement ps = connection.prepareStatement("SELECT userName FROM \"User\" WHERE email = ? AND userPassword = ?");
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+            String result = null;
+            if (rs.next()) {
+                System.out.println("Has user");
+                result = rs.getString(1);
+                System.out.println(rs.getString(1));
+            }
+            rs.close();
+            ps.close();
+            return result;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
     public void deleteBranch(int branchId) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
