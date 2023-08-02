@@ -1,5 +1,6 @@
 package com.cpsc304.anything.controllers;
 
+import com.cpsc304.anything.Models.User;
 import com.cpsc304.anything.database.DatabaseConnectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,5 +22,10 @@ public class AnythingController {
     @PostMapping("/login")
     public Map<String, String> userLogin(@RequestBody UserRequest user) {
         return Collections.singletonMap("username", handler.userLogin(user.email, user.password));
+    }
+
+    @PostMapping("/registration")
+    public Map<String, String> userRegistration(@RequestBody User user) {
+        return Collections.singletonMap("username", handler.userRegistration(user.email, user.userName, user.userPassword));
     }
 }

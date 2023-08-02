@@ -1,5 +1,6 @@
 package com.cpsc304.anything.database;
 
+import com.cpsc304.anything.Models.User;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.Connection;
@@ -15,9 +16,9 @@ import java.util.ArrayList;
  */
 public class DatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
-//	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
+	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
     // Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
-    private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
+    //private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
     private static final String WARNING_TAG = "[WARNING]";
 
@@ -75,6 +76,33 @@ public class DatabaseConnectionHandler {
                 result = rs.getString(1);
                 System.out.println(rs.getString(1));
             }
+            rs.close();
+            ps.close();
+            return result;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String userRegistration(String email, String userName, String userPassword) {
+        try {
+            System.out.println(email);
+            System.out.println(userName);
+            System.out.println(userPassword);
+            User user = new User(userName, email, userPassword);
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO \"User\" VALUES (?,?,?,?,?)");
+            java.sql.Date sqlDate = new java.sql.Date(user.getRegistrationDate().getTime());
+            ps.setInt(1, user.getUserID());
+            ps.setDate(2, sqlDate);
+            ps.setString(3, userName);
+            ps.setString(4, email);
+            ps.setString(5, userPassword);
+
+            ResultSet rs = ps.executeQuery();
+            connection.commit();
+            String result = null;
+
             rs.close();
             ps.close();
             return result;
