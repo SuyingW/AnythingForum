@@ -1,5 +1,38 @@
+<script setup>
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const $route = useRoute();
+const $router = useRouter();
+const leftDrawerOpen = ref(false);
+
+const navigationItems = [
+  {
+    label: 'Home',
+    routeName: 'index',
+  },
+  {
+    label: 'Register',
+    routeName: 'register',
+  },
+  {
+    label: 'Manage Users',
+    routeName: 'users',
+  }
+]
+
+function toggleLeftDrawer () {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+function handleRouteClick(name) {
+  if ($route.name !== name) {
+    $router.push({ name })
+  }
+}
+</script>
+
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -12,10 +45,8 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Anything
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -25,17 +56,19 @@
       bordered
     >
       <q-list>
-        <q-item-label
-          header
+        <q-item
+          v-for="item in navigationItems"
+          :key="item.routeName"
+          clickable
+          v-ripple
+          :active="$route.name === item.routeName"
+          active-class="bg-primary text-white"
+          @click="handleRouteClick(item.routeName)"
         >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+          <q-item-section>
+            <q-item-label class="text-weight-medium">{{ item.label }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -44,73 +77,3 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
-</script>

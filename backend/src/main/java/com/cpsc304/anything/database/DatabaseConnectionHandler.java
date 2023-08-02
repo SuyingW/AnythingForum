@@ -1,5 +1,8 @@
 package com.cpsc304.anything.database;
 
+import com.cpsc304.anything.Models.User;
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,9 +16,9 @@ import java.util.ArrayList;
  */
 public class DatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
-//	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
+	//private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
     // Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
-    private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
+    //private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
     private static final String WARNING_TAG = "[WARNING]";
 
@@ -35,9 +38,77 @@ public class DatabaseConnectionHandler {
         try {
             if (connection != null) {
                 connection.close();
+                System.out.println("Closed connection to Oracle.");
             }
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    public void getTableNames() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select table_name from user_tables");
+
+            while(rs.next()) {
+                System.out.println(rs.getString(1));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    public String userLogin(String email, String password) {
+        try {
+            System.out.println(email);
+            System.out.println(password);
+            PreparedStatement ps = connection.prepareStatement("SELECT userName FROM \"User\" WHERE email = ? AND userPassword = ?");
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+            String result = null;
+            if (rs.next()) {
+                System.out.println("Has user");
+                result = rs.getString(1);
+                System.out.println(rs.getString(1));
+            }
+            rs.close();
+            ps.close();
+            return result;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String userRegistration(int userID, String email, String userName, String userPassword) {
+        try {
+            System.out.println(email);
+            System.out.println(userName);
+            System.out.println(userPassword);
+            User user = new User(userID, userName, email, userPassword);
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO \"User\" VALUES (?,?,?,?,?)");
+            java.sql.Date sqlDate = new java.sql.Date(user.getRegistrationDate().getTime());
+            ps.setInt(1, user.getUserID());
+            ps.setDate(2, sqlDate);
+            ps.setString(3, userName);
+            ps.setString(4, email);
+            ps.setString(5, userPassword);
+
+            ResultSet rs = ps.executeQuery();
+            connection.commit();
+            String result = null;
+
+            rs.close();
+            ps.close();
+            return result;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
         }
     }
 
@@ -80,20 +151,23 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public boolean login(String username, String password) {
+    public void login() {
+        Dotenv dotenv = Dotenv.load();
+        String username = dotenv.get("ORACLE_USERNAME");
+        String password = dotenv.get("ORACLE_PASSWORD");
+        String url = dotenv.get("ORACLE_URL");
+
         try {
             if (connection != null) {
                 connection.close();
             }
 
-            connection = DriverManager.getConnection(ORACLE_URL, username, password);
+            connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");
-            return true;
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            return false;
         }
     }
 
