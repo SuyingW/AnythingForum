@@ -6,9 +6,9 @@ CREATE TABLE "Category" (
 CREATE TABLE "User" (
   userID INT PRIMARY KEY,
   registrationDate DATE NOT NULL,
-  userName CHAR(20) NOT NULL,
-  email CHAR(320) NOT NULL,
-  userPassword CHAR(100) NOT NULL
+  userName VARCHAR2(20) NOT NULL,
+  email VARCHAR2(320) NOT NULL,
+  userPassword VARCHAR2(100) NOT NULL
 );
 
 CREATE TABLE "Post" (

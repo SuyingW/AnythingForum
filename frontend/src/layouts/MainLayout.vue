@@ -1,5 +1,38 @@
+<script setup>
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const $route = useRoute();
+const $router = useRouter();
+const leftDrawerOpen = ref(false);
+
+const navigationItems = [
+  {
+    label: 'Home',
+    routeName: 'index',
+  },
+  {
+    label: 'Register',
+    routeName: 'register',
+  },
+  {
+    label: 'Manage Users',
+    routeName: 'users',
+  }
+]
+
+function toggleLeftDrawer () {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+function handleRouteClick(name) {
+  if ($route.name !== name) {
+    $router.push({ name })
+  }
+}
+</script>
+
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -24,10 +57,16 @@
     >
       <q-list>
         <q-item
+          v-for="item in navigationItems"
+          :key="item.routeName"
           clickable
+          v-ripple
+          :active="$route.name === item.routeName"
+          active-class="bg-primary text-white"
+          @click="handleRouteClick(item.routeName)"
         >
           <q-item-section>
-            <q-item-label>Login</q-item-label>
+            <q-item-label class="text-weight-medium">{{ item.label }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -38,22 +77,3 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script>
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  name: 'MainLayout',
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
-</script>
