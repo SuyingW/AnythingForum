@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class DatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
-	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
+	//private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
     // Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
     //private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
@@ -85,12 +85,12 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public String userRegistration(String email, String userName, String userPassword) {
+    public String userRegistration(int userID, String email, String userName, String userPassword) {
         try {
             System.out.println(email);
             System.out.println(userName);
             System.out.println(userPassword);
-            User user = new User(userName, email, userPassword);
+            User user = new User(userID, userName, email, userPassword);
             PreparedStatement ps = connection.prepareStatement("INSERT INTO \"User\" VALUES (?,?,?,?,?)");
             java.sql.Date sqlDate = new java.sql.Date(user.getRegistrationDate().getTime());
             ps.setInt(1, user.getUserID());
@@ -155,13 +155,14 @@ public class DatabaseConnectionHandler {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");
         String password = dotenv.get("ORACLE_PASSWORD");
+        String url = dotenv.get("ORACLE_URL");
 
         try {
             if (connection != null) {
                 connection.close();
             }
 
-            connection = DriverManager.getConnection(ORACLE_URL, username, password);
+            connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");

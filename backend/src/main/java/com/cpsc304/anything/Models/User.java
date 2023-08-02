@@ -10,17 +10,17 @@ public class User {
     public Date registrationDate;
     public int userID;
 
-    public User(String userName, String email, String userPassword) {
+    public User(int userID, String userName, String email, String userPassword) {
         this.userName = userName;
         this.email = email;
         this.userPassword = userPassword;
         this.registrationDate = new Date();
-        this.userID = generateUserID();
+        this.userID = userID;
     }
 
-    private int generateUserID() {
-        return userCount++;
-    }
+    //private int generateUserID() {
+//        return userCount++;
+//    }
 
     public int getUserID() { return userID; }
 

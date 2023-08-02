@@ -5,12 +5,14 @@ import { ref } from "vue";
 const email = ref("");
 const userPassword = ref("");
 const userName = ref("");
+const userID = ref("");
 
 function handleRegistration() {
   api.post("/registration", {
       email: email.value,
       userName: userName.value,
       userPassword: userPassword.value,
+      userID: userID.value
     })
     .then((response) => {
       console.log(response);
@@ -28,6 +30,12 @@ function handleRegistration() {
         <q-card-section>
           <div class="tex-h6">Registration</div>
           <q-input class="q-my-md" outlined v-model="email" label="Email" />
+          <q-input
+            class="q-my-md"
+            outlined
+            v-model="userID"
+            label="userID"
+          />
           <q-input
             class="q-my-md"
             outlined
@@ -63,7 +71,7 @@ function handleRegistration() {
 
   .registration-card {
     width: 600px;
-    height: 300px;
+    height: 420px;
   }
 }
 </style>
