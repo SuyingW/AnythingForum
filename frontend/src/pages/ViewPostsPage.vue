@@ -47,6 +47,7 @@ api
   console.log(error);
 });
 
+
 // function showContent() {
 //   api
 //     .get("/posts")
