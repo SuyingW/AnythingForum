@@ -242,6 +242,7 @@ public class DatabaseConnectionHandler {
         }
     }
 
+
     public void login() {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");
