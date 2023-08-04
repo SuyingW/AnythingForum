@@ -66,7 +66,7 @@ function showContent() {
 
 <template>
   <q-page padding>
-    <div class="text-h5">ViewPosts</div>
+    <div class="text-h5">Posts</div>
 
     <q-card class="posts-container">
       <q-table
