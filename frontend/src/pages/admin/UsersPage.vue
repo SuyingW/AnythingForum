@@ -9,19 +9,60 @@ const users = ref([
 ]);
 */
 
+const userColumns = [
+  {
+    name: "userID",
+    label: "ID",
+    field: "userID",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "userName",
+    label: "User Name",
+    field: "userName",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "email",
+    label: "Email",
+    field: "email",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "userPassword",
+    label: "Password",
+    field: "userPassword",
+    align: "left",
+  },
+  {
+    name: "registrationDate",
+    label: "Registration Date",
+    field: "registrationDate",
+    align: "left",
+  },
+  {
+    name: "actions",
+    label: "Actions",
+    align: "left",
+  },
+]
+
 const users = ref([]);
 
 api
   .get("/users")
   .then((response) => {
-    users.value = response.data;
+    users.value = response.data.users;
     console.log(response.data);
   })
   .catch((error) => {
     console.log(error);
   });
 
-function handleWriter() {
+function becomeWriter() {
   api
     .post("/becomeWriter", {
       userID: userID.value,
@@ -40,22 +81,17 @@ function handleWriter() {
     <div class="text-h5">Users</div>
 
     <q-card class="users-container">
-      <q-list bordered>
-        <q-item v-for="user in users" :key="user.userID">
-          <q-item-section>
-            <q-item-label>{{ user.userName }}</q-item-label>
-            <q-item-label caption lines="1">{{ user.userID }}</q-item-label>
-          </q-item-section>
-
-          <q-item-section side>
-            <q-toggle
-              v-model="active"
-              label="become writer"
-              @change="handleWriter(user)"
-            />
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <q-table
+        :columns="userColumns"
+        :rows="users"
+        row-key="userID"
+      >
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <q-btn color="primary" flat @click="becomeWriter(props.row.userID)" label="Become Writer" />
+          </q-td>
+        </template>
+      </q-table>
     </q-card>
   </q-page>
 </template>
