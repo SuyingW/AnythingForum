@@ -93,7 +93,7 @@ public class DatabaseConnectionHandler {
             System.out.println(email);
             System.out.println(userName);
             System.out.println(userPassword);
-            User user = new User(userID, userName, email, userPassword);
+            User user = new User(userID, userName, email, userPassword,null);
             PreparedStatement ps = connection.prepareStatement("INSERT INTO \"User\" VALUES (?,?,?,?,?)");
             java.sql.Date sqlDate = new java.sql.Date(user.getRegistrationDate().getTime());
             ps.setInt(1, user.getUserID());
@@ -120,17 +120,20 @@ public class DatabaseConnectionHandler {
         ArrayList<User> result = new ArrayList<User>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"User\"");
-            //User(int userID, String userName, String email, String userPassword)
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT \"User\".userID, \"User\".registrationDate, \"User\".userName, \"User\".email, \"User\".userPassword, \"Writer\".alias FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
+
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
                 User user = new User(rs.getInt("userID"),
                         rs.getString("userName"),
                         rs.getString("email"),
-                        rs.getString("userPassword"));
+                        rs.getString("userPassword"),
+                        rs.getString("alias"));
                 Date registrationDate = rs.getDate("registrationDate");
                 user.setRegistrationDate(registrationDate);
+
                 result.add(user);
                 System.out.println(user.userID);
             }

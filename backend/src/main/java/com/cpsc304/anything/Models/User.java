@@ -13,13 +13,13 @@ public class User {
 
     private String alias;
 
-    public User(int userID, String userName, String email, String userPassword) {
+    public User(int userID, String userName, String email, String userPassword, String alias) {
         this.userName = userName;
         this.email = email;
         this.userPassword = userPassword;
         this.registrationDate = new Date();
         this.userID = userID;
-        this.alias = null;
+        this.alias = alias;
     }
 
     public int getUserID() { return userID; }

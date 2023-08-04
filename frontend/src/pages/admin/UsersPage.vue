@@ -37,6 +37,12 @@ const userColumns = [
     align: "left",
   },
   {
+    name: "alias",
+    label: "Alias",
+    field: "alias",
+    align: "left",
+  },
+  {
     name: "actions",
     label: "Actions",
     align: "left",
