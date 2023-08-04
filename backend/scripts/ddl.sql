@@ -1,6 +1,6 @@
 CREATE TABLE "Category" (
   categoryID INT PRIMARY KEY,
-  categoryName CHAR(50) UNIQUE NOT NULL
+  categoryName VARCHAR2(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE "User" (
@@ -14,7 +14,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Post" (
   postID INT PRIMARY KEY, 
   content VARCHAR2(4000) NOT NULL, 
-  title CHAR(100)	NOT NULL, 
+  title VARCHAR2(100)	NOT NULL, 
   publishDate DATE NOT NULL, 
   categoryID INT NOT NULL, 
   userID INT NOT NULL,
@@ -25,12 +25,12 @@ CREATE TABLE "Post" (
 
 CREATE TABLE "Tag" (
   tagID INT PRIMARY KEY,
-  tagName CHAR(50) UNIQUE NOT NULL
+  tagName VARCHAR2(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE "Collection" (
   collectionID INT PRIMARY KEY,
-  title CHAR(100) NOT NULL,
+  title VARCHAR2(100) NOT NULL,
   userID INT NOT NULL,
   FOREIGN KEY (userID) REFERENCES "User"
     ON DELETE CASCADE
@@ -38,7 +38,7 @@ CREATE TABLE "Collection" (
 
 CREATE TABLE "Writer" (
   userID INT PRIMARY KEY,
-  alias CHAR(50),
+  alias VARCHAR2(50),
   FOREIGN KEY (userID) REFERENCES "User"
     ON DELETE CASCADE
 );
@@ -46,7 +46,7 @@ CREATE TABLE "Writer" (
 CREATE TABLE "BookmarkList" (
   userID INT,
   listID INT,
-  listName CHAR(50) NOT NULL,
+  listName VARCHAR2(50) NOT NULL,
   PRIMARY KEY (userID, listID),
   FOREIGN KEY (userID) REFERENCES "User"
     ON DELETE CASCADE
