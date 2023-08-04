@@ -8,16 +8,36 @@ public class Post {
     public String content;
     public Date publishDate;
     public int categoryID;
+    public String categoryName;
     public int userID;
+    public String alias;
 
 
-    public Post(int postID, String title, String content, int categoryID, int userID) {
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getWriterAlias() {
+        return alias;
+    }
+
+    public void setWriterAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public Post(int postID, String title, String content, int categoryID, String categoryName, int userID, String alias) {
         this.postID = postID;
         this.title = title;
         this.content = content;
         this.categoryID = categoryID;
         this.userID = userID;
         this.publishDate = new Date();
+        this.categoryName = categoryName;
+        this.alias = alias;
     }
 
 
@@ -68,4 +88,5 @@ public class Post {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
 }

@@ -5,7 +5,7 @@ import { ref } from "vue";
 const postColumns = [
   {
     name: "postID",
-    label: "ID",
+    label: "postID",
     field: "postID",
     align: "left",
     sortable: true,
@@ -18,16 +18,16 @@ const postColumns = [
     sortable: true,
   },
   {
-    name: "userID",
-    label: "writer",
-    field: "userID",
+    name: "alias",
+    label: "Writer",
+    field: "alias",
     align: "left",
     sortable: true,
   },
   {
-    name: "categoryID",
+    name: "category",
     label: "Category",
-    field: "categoryID",
+    field: "categoryName",
     align: "left",
     sortable: true,
   },

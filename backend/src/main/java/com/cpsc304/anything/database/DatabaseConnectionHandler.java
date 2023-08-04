@@ -149,7 +149,7 @@ public class DatabaseConnectionHandler {
         ArrayList<Post> result = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\"");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"Writer\" ON \"Post\".userID=\"Writer\".userID JOIN \"Category\" ON \"Post\".categoryID=\"Category\".categoryID");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -157,7 +157,9 @@ public class DatabaseConnectionHandler {
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("categoryID"),
-                        rs.getInt("userID"));
+                        rs.getString("categoryName"),
+                        rs.getInt("userID"),
+                        rs.getString("alias"));
                 result.add(post);
                 System.out.println(post.postID);
             }
