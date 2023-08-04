@@ -2,13 +2,6 @@
 import { api } from "boot/axios";
 import { ref } from "vue";
 
-/*
-const users = ref([
-  { userID: "1234", userName: "Diana" },
-  { userID: "2345", userName: "Suying" },
-]);
-*/
-
 const userColumns = [
   {
     name: "userID",
@@ -48,9 +41,10 @@ const userColumns = [
     label: "Actions",
     align: "left",
   },
-]
+];
 
 const users = ref([]);
+const isWriter = ref(true);
 
 api
   .get("/users")
@@ -81,14 +75,20 @@ function becomeWriter() {
     <div class="text-h5">Users</div>
 
     <q-card class="users-container">
-      <q-table
-        :columns="userColumns"
-        :rows="users"
-        row-key="userID"
-      >
+      <q-table :columns="userColumns" :rows="users" row-key="userID">
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn color="primary" flat @click="becomeWriter(props.row.userID)" label="Become Writer" />
+            <template v-if="!isWriter">
+              <q-btn
+                color="primary"
+                flat
+                @click="becomeWriter(props.row.userID)"
+                label="Become Writer"
+              />
+            </template>
+            <template v-else>
+              <p>Writer</p>
+            </template>
           </q-td>
         </template>
       </q-table>

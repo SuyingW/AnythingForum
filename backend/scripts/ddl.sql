@@ -38,7 +38,7 @@ CREATE TABLE "Collection" (
 
 CREATE TABLE "Writer" (
   userID INT PRIMARY KEY,
-  alias VARCHAR2(50),
+  alias VARCHAR2(50) DEFAULT 'Anonymous',
   FOREIGN KEY (userID) REFERENCES "User"
     ON DELETE CASCADE
 );

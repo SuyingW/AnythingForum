@@ -8,7 +8,10 @@ public class User {
     public String email;
     public String userPassword;
     public Date registrationDate;
+
     public int userID;
+
+    private String alias;
 
     public User(int userID, String userName, String email, String userPassword) {
         this.userName = userName;
@@ -16,11 +19,8 @@ public class User {
         this.userPassword = userPassword;
         this.registrationDate = new Date();
         this.userID = userID;
+        this.alias = null;
     }
-
-    //private int generateUserID() {
-//        return userCount++;
-//    }
 
     public int getUserID() { return userID; }
 
