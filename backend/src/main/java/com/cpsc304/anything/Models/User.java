@@ -3,7 +3,7 @@ package com.cpsc304.anything.Models;
 import java.util.Date;
 
 public class User {
-    private static int userCount = 0;
+    //private static int userCount = 0;
     public String userName;
     public String email;
     public String userPassword;

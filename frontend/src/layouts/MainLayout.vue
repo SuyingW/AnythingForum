@@ -18,6 +18,10 @@ const navigationItems = [
   {
     label: 'Manage Users',
     routeName: 'users',
+  },
+  {
+    label: 'View Posts',
+    routeName: 'posts',
   }
 ]
 

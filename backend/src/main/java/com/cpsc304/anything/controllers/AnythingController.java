@@ -1,5 +1,6 @@
 package com.cpsc304.anything.controllers;
 
+import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
 import com.cpsc304.anything.database.DatabaseConnectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +34,10 @@ public class AnythingController {
     public Map<String, User[]> userList() {
         return Collections.singletonMap("users", handler.userList());
     }
+
+    @GetMapping("/posts")
+    public Map<String, Post[]> postList() {
+        return Collections.singletonMap("posts", handler.postList());
+    }
+
 }

@@ -1,7 +1,9 @@
 package com.cpsc304.anything.database;
 
+import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
 import io.github.cdimascio.dotenv.Dotenv;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * This class handles all database related transactions
@@ -114,7 +117,7 @@ public class DatabaseConnectionHandler {
 
 
     public User[] userList() {
-        ArrayList<User> result = new ArrayList<>();
+        ArrayList<User> result = new ArrayList<User>();
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"User\"");
@@ -126,6 +129,8 @@ public class DatabaseConnectionHandler {
                         rs.getString("userName"),
                         rs.getString("email"),
                         rs.getString("userPassword"));
+                Date registrationDate = rs.getDate("registrationDate");
+                user.setRegistrationDate(registrationDate);
                 result.add(user);
                 System.out.println(user.userID);
             }
@@ -133,6 +138,33 @@ public class DatabaseConnectionHandler {
             rs.close();
             ps.close();
             return result.toArray(new User[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Post[] postList() {
+        ArrayList<Post> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\"");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Post post = new Post(rs.getInt("postID"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("categoryID"),
+                        rs.getInt("userID"));
+                result.add(post);
+                System.out.println(post.postID);
+            }
+
+                rs.close();
+                ps.close();
+                return result.toArray(new Post[result.size()]);
 
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
