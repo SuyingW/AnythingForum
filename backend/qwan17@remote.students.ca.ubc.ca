@@ -1,0 +1,8 @@
+INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
+VALUES (1, 'CPSC 304 is such a great course!!!', 'My thoughts after the midterm',
+        TO_DATE('2023-07-24 15:37:59', 'YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
+VALUES (2, 'ChatGPT is not going to replace jobs, but it certainly will make
+teachers '' jobs much harder.', 'What about ChatGPT?', TO_DATE('2023-07-24 21:25:31',
+'YYYY-MM-DD HH24:MI:SS'), 4, 2);
