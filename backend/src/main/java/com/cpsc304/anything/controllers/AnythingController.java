@@ -28,4 +28,9 @@ public class AnythingController {
     public Map<String, String> userRegistration(@RequestBody User user) {
         return Collections.singletonMap("username", handler.userRegistration(user.userID, user.email, user.userName, user.userPassword));
     }
+
+    @PostMapping("/users")
+    public Map<String, User[]> userList(@RequestBody User user) {
+        return Collections.singletonMap("success", handler.userList());
+    }
 }
