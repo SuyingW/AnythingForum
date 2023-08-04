@@ -1,6 +1,9 @@
 <script setup>
 import { api } from "boot/axios";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const $router = useRouter();
 
 const postColumns = [
   {
@@ -50,16 +53,8 @@ api
     console.log(error);
   });
 
-function showContent() {
-  api
-    .get("/posts")
-    .then((response) => {
-      posts.value = response.data.posts;
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+function showContent(postID) {
+  $router.push({ name: "post", params: { id: postID } });
 }
 
 </script>
