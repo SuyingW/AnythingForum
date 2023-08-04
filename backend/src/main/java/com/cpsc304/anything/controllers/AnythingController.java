@@ -29,7 +29,7 @@ public class AnythingController {
         return Collections.singletonMap("username", handler.userRegistration(user.userID, user.email, user.userName, user.userPassword));
     }
 
-    @PostMapping("/users")
+    @GetMapping("/users")
     public Map<String, User[]> userList(@RequestBody User user) {
         return Collections.singletonMap("success", handler.userList());
     }
