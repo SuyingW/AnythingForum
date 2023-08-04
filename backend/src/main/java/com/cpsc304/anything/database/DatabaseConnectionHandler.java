@@ -219,18 +219,19 @@ public class DatabaseConnectionHandler {
 
     public Post getPost(int postID) {
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" WHERE \"Post\".postID = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"Writer\" ON \"Post\".userID=\"Writer\".userID JOIN \"Category\" ON \"Post\".categoryID=\"Category\".categoryID WHERE postID=(?)");
             ps.setInt(1, postID);
 
             ResultSet rs = ps.executeQuery();
-            Post post = null;
-            if (rs.next()) {
-                post = new Post(rs.getInt("postID"),
+
+                Post post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("categoryID"),
-                        rs.getInt("userID"));
-            }
+                        rs.getString("categoryName"),
+                        rs.getInt("userID"),
+                        rs.getString("alias"));
+
 
             rs.close();
             ps.close();
