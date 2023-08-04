@@ -172,6 +172,10 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public void beWriter(int userID) {
+
+    }
+
     public void deleteBranch(int branchId) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");

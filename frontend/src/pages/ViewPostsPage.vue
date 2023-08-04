@@ -2,7 +2,6 @@
 import { api } from "boot/axios";
 import { ref } from "vue";
 
-
 const postColumns = [
   {
     name: "postID",
@@ -32,20 +31,19 @@ const postColumns = [
     align: "left",
     sortable: true,
   },
-]
+];
 
 const posts = ref([]);
 
 api
-.get("/posts")
-.then((response) => {
-  posts.value = response.data.posts;
-  console.log(response.data);
-})
-.catch((error) => {
-  console.log(error);
-});
-
+  .get("/posts")
+  .then((response) => {
+    posts.value = response.data.posts;
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 // function showContent() {
 //   api
@@ -58,7 +56,6 @@ api
 //       console.log(error);
 //     })
 // }
-
 </script>
 
 <template>
@@ -66,11 +63,7 @@ api
     <div class="text-h5">ViewPosts</div>
 
     <q-card class="posts-container">
-      <q-table
-        :columns="postColumns"
-        :rows="posts"
-        row-key="postID"
-      >
+      <q-table :columns="postColumns" :rows="posts" row-key="postID">
         <!-- <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn color="primary" flat @click="showContent(props.row.postID)" label="View Content" />
@@ -80,7 +73,6 @@ api
     </q-card>
   </q-page>
 </template>
-
 
 <style lang="scss" scoped>
 .posts-container {
