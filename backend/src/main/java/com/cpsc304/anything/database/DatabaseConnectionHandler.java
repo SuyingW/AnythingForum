@@ -112,6 +112,34 @@ public class DatabaseConnectionHandler {
         }
     }
 
+
+    public User[] userList() {
+        ArrayList<User> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"User\"");
+            //User(int userID, String userName, String email, String userPassword)
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                User user = new User(rs.getInt("userID"),
+                        rs.getString("userName"),
+                        rs.getString("email"),
+                        rs.getString("userPassword"));
+                result.add(user);
+                System.out.println(user.userID);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new User[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
     public void deleteBranch(int branchId) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
