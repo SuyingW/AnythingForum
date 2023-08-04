@@ -217,6 +217,30 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public Post getPost(int postID) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" WHERE \"Post\".postID = ?");
+            ps.setInt(1, postID);
+
+            ResultSet rs = ps.executeQuery();
+            Post post = null;
+            if (rs.next()) {
+                post = new Post(rs.getInt("postID"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("categoryID"),
+                        rs.getInt("userID"));
+            }
+
+            rs.close();
+            ps.close();
+            return post;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
     public void login() {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");

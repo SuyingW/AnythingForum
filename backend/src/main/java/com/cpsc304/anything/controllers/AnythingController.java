@@ -40,4 +40,10 @@ public class AnythingController {
         return Collections.singletonMap("posts", handler.postList());
     }
 
+    @GetMapping("/post/{postID}")
+    public Map<String, Post> getPost(@PathVariable("postID") int postID) {
+        System.out.println(postID);
+        return Collections.singletonMap("post", handler.getPost(postID));
+    }
+
 }
