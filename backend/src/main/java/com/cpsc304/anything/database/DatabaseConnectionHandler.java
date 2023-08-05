@@ -253,7 +253,7 @@ public class DatabaseConnectionHandler {
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
                         rs.getString("alias"));
-                Date publishTime = rs.getTime("publishTime");
+                Date publishTime = rs.getTime("publishDate");
                 post.setPublishDate(publishTime);
                 System.out.println(post.getPostID());
             }
