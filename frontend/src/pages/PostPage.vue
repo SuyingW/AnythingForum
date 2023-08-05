@@ -22,6 +22,9 @@ api
   <q-page padding>
     <div v-if="post !== null" class="post-container">
       <div class="text-h4">{{ post.title }}</div>
+      <div class="writer">{{ post.alias }}</div>
+      <div class="publishDate">{{ post.publishDate }}</div>
+      <div class="text-h5">{{ post.content }}</div>
     </div>
   </q-page>
 </template>

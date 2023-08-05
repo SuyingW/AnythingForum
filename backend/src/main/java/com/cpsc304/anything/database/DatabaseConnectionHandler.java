@@ -225,16 +225,21 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"Writer\" ON \"Post\".userID=\"Writer\".userID JOIN \"Category\" ON \"Post\".categoryID=\"Category\".categoryID WHERE postID=(?)");
             ps.setInt(1, postID);
 
+            Post post = null;
             ResultSet rs = ps.executeQuery();
 
-                Post post = new Post(rs.getInt("postID"),
+            while(rs.next()) {
+                post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("categoryID"),
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
                         rs.getString("alias"));
-
+                Date publishTime = rs.getTime("publishTime");
+                post.setPublishDate(publishTime);
+                System.out.println(post.getPostID());
+            }
 
             rs.close();
             ps.close();
