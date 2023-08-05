@@ -1,6 +1,9 @@
 <script setup>
 import { api } from "boot/axios";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const $router = useRouter();
 
 const userColumns = [
   {
@@ -62,18 +65,24 @@ api
     console.log(error);
   });
 
-function becomeWriter() {
-  api
-    .post("/becomeWriter", {
-      userID: userID.value,
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+// function becomeWriter() {
+//   api
+//     .post("/becomeWriter", {
+//       userID: userID.value,
+//     })
+//     .then((response) => {
+//       console.log(response);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+
+function addAlias(userID) {
+  $router.push({ name: "user", params: {id: userID} });
 }
+
+
 </script>
 
 <template>
@@ -81,20 +90,24 @@ function becomeWriter() {
     <div class="text-h5">Users</div>
 
     <q-card class="users-container">
-      <q-table :columns="userColumns" :rows="users" row-key="userID">
+      <q-table
+      :columns="userColumns"
+      :rows="users"
+      row-key="userID"
+      >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <template v-if="!isWriter">
+            <!-- <template v-if="!isWriter"> -->
               <q-btn
                 color="primary"
                 flat
-                @click="becomeWriter(props.row.userID)"
+                @click="addAlias(props.row.userID)"
                 label="Become Writer"
               />
-            </template>
-            <template v-else>
+            <!-- </template> -->
+            <!-- <template v-else>
               <p>Writer</p>
-            </template>
+            </template> -->
           </q-td>
         </template>
       </q-table>

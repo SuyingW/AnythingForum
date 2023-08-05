@@ -12,6 +12,7 @@ const routes = [
         children: [
           { name: 'users', path: 'users', component: () => import('pages/admin/UsersPage.vue') },
           { name: 'posts', path: 'posts', component: () => import('pages/admin/PostsPage.vue') },
+          { name: 'user', path: 'user/:id', component: () => import('pages/admin/AliasPage.vue')}
         ],
       }
     ]

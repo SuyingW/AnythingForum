@@ -2,6 +2,7 @@ package com.cpsc304.anything.database;
 
 import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
+import com.cpsc304.anything.Models.Writer;
 import io.github.cdimascio.dotenv.Dotenv;
 import oracle.jdbc.proxy.annotation.Pre;
 
@@ -120,9 +121,10 @@ public class DatabaseConnectionHandler {
         ArrayList<User> result = new ArrayList<User>();
 
         try {
+//            PreparedStatement ps = connection.prepareStatement(
+//                    "SELECT \"User\".userID, \"User\".registrationDate, \"User\".userName, \"User\".email, \"User\".userPassword, \"Writer\".alias FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
             PreparedStatement ps = connection.prepareStatement(
-                    "SELECT \"User\".userID, \"User\".registrationDate, \"User\".userName, \"User\".email, \"User\".userPassword, \"Writer\".alias FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
-
+                    "SELECT * FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -177,8 +179,23 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void beWriter(int userID) {
+    public String beWriter(int userID, String alias) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO \"Writer\" VALUES (?,?)");
+            ps.setInt(1, userID);
+            ps.setString(2, alias);
 
+            ResultSet rs = ps.executeQuery();
+            connection.commit();
+            String result = null;
+
+            rs.close();
+            ps.close();
+            return result;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
     }
 
     public void deleteBranch(int branchId) {

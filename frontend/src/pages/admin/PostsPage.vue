@@ -71,7 +71,12 @@ function showContent(postID) {
       >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn color="primary" flat @click="showContent(props.row.postID)" label="View Content" />
+            <q-btn
+            color="primary"
+            flat
+            @click="showContent(props.row.postID)"
+            label="View Content"
+            />
           </q-td>
         </template>
       </q-table>

@@ -11,7 +11,7 @@ public class User {
 
     public int userID;
 
-    private String alias;
+    public String alias;
 
     public User(int userID, String userName, String email, String userPassword, String alias) {
         this.userName = userName;

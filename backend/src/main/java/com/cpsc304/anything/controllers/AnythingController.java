@@ -2,6 +2,7 @@ package com.cpsc304.anything.controllers;
 
 import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
+import com.cpsc304.anything.Models.Writer;
 import com.cpsc304.anything.database.DatabaseConnectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,4 +47,8 @@ public class AnythingController {
         return Collections.singletonMap("post", handler.getPost(postID));
     }
 
+    @PostMapping("/writer")
+    public Map<String, String> beWriter(@RequestBody Writer writer) {
+        return Collections.singletonMap("alias", handler.beWriter(writer.userID, writer.alias));
+    }
 }
