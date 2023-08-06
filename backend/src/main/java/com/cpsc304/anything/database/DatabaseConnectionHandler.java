@@ -1,10 +1,9 @@
 package com.cpsc304.anything.database;
 
+import com.cpsc304.anything.Models.Collection;
 import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
-import com.cpsc304.anything.Models.Writer;
 import io.github.cdimascio.dotenv.Dotenv;
-import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -268,6 +267,66 @@ public class DatabaseConnectionHandler {
     }
 
 
+    public Collection[] collectionList() {
+        // return the list of all collections with the alias
+        ArrayList<Collection> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT * FROM \"Collection\" JOIN \"Writer\" on \"Collection\".userID = \"Writer\".userID");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Collection coll = new Collection(rs.getInt("collectionID"),
+                        rs.getString("title"),
+                        rs.getInt("userID"),
+                        rs.getString("alias"));
+
+                result.add(coll);
+                System.out.println(coll.collectionID);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new Collection[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    public Post[] postInColl(int collectionID) {
+        // return the list of posts in this collection
+        ArrayList<Post> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"CollectionContains\" ON \"CollectionContains\".collectionID=(?)");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Post post = new Post(rs.getInt("postID"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("categoryID"),
+                        rs.getString("categoryName"),
+                        rs.getInt("userID"),
+                        rs.getString(null));
+                result.add(post);
+                System.out.println(post.postID);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new Post[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
     public void login() {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");
@@ -326,4 +385,5 @@ public class DatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
+
 }

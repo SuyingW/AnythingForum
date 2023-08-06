@@ -1,5 +1,6 @@
 package com.cpsc304.anything.controllers;
 
+import com.cpsc304.anything.Models.Collection;
 import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
 import com.cpsc304.anything.Models.Writer;
@@ -51,4 +52,13 @@ public class AnythingController {
     public Map<String, String> beWriter(@RequestBody Writer writer) {
         return Collections.singletonMap("alias", handler.beWriter(writer.userID, writer.alias));
     }
+
+    @GetMapping("/collections")
+    public Map<String, Collection[]> collectionList() {return Collections.singletonMap("collections", handler.collectionList());}
+
+    @GetMapping("/showPosts")
+    public Map<String, Post[]> postListInColl(@PathVariable("collectionID") int collectionID) {
+        return Collections.singletonMap("posts", handler.postInColl(collectionID));
+    }
+
 }

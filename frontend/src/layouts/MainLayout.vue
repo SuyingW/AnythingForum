@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const $route = useRoute();
 const $router = useRouter();
@@ -8,29 +8,33 @@ const leftDrawerOpen = ref(false);
 
 const navigationItems = [
   {
-    label: 'Home',
-    routeName: 'index',
+    label: "Home",
+    routeName: "index",
   },
   {
-    label: 'Register',
-    routeName: 'register',
+    label: "Register",
+    routeName: "register",
   },
   {
-    label: 'Manage Users',
-    routeName: 'users',
+    label: "Manage Users",
+    routeName: "users",
   },
   {
-    label: 'View Posts',
-    routeName: 'posts',
-  }
-]
+    label: "View Posts",
+    routeName: "posts",
+  },
+  {
+    label: "Collections",
+    routeName: "collections",
+  },
+];
 
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 function handleRouteClick(name) {
   if ($route.name !== name) {
-    $router.push({ name })
+    $router.push({ name });
   }
 }
 </script>
@@ -48,17 +52,11 @@ function handleRouteClick(name) {
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Anything
-        </q-toolbar-title>
+        <q-toolbar-title> Anything </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
         <q-item
           v-for="item in navigationItems"
@@ -70,7 +68,9 @@ function handleRouteClick(name) {
           @click="handleRouteClick(item.routeName)"
         >
           <q-item-section>
-            <q-item-label class="text-weight-medium">{{ item.label }}</q-item-label>
+            <q-item-label class="text-weight-medium">{{
+              item.label
+            }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
