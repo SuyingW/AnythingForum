@@ -74,7 +74,7 @@ public class AnythingController {
         return Collections.singletonMap("posts", handler.getPostsInBookmarkList(userID, listID));
     }
 
-    @GetMapping("/showPosts")
+    @GetMapping("/collections/{collectionID}/posts")
     public Map<String, Post[]> postListInColl(@PathVariable("collectionID") int collectionID) {
         return Collections.singletonMap("posts", handler.postInColl(collectionID));
     }

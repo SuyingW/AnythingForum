@@ -285,7 +285,6 @@ public class DatabaseConnectionHandler {
                         rs.getString("alias"));
 
                 result.add(coll);
-                System.out.println(coll.collectionID);
             }
 
             rs.close();
@@ -304,19 +303,21 @@ public class DatabaseConnectionHandler {
         ArrayList<Post> result = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"CollectionContains\" ON \"CollectionContains\".collectionID=(?)");
-            ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT * FROM \"Post\" JOIN \"CollectionContains\" ON \"Post\".postID = \"CollectionContains\".postID JOIN \"Category\" ON \"Post\".categoryID = \"Category\".categoryID JOIN \"Writer\" ON \"Post\".userID = \"Writer\".userID WHERE \"CollectionContains\".collectionID =(?)");
 
+            ps.setInt(1, collectionID);
+
+            ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 Post post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getInt("categoryID"),
+                        rs.getInt("collectionID"),
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
-                        rs.getString(null));
+                        rs.getString("alias"));
                 result.add(post);
-                System.out.println(post.postID);
             }
 
             rs.close();
