@@ -385,6 +385,25 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public boolean addBookmarkList(int userID, String listName) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO \"BookmarkList\" VALUES (?, (SELECT MAX(listID) FROM \"BookmarkList\" GROUP BY userID HAVING userID = ?) + 1, ?)");
+            ps.setInt(1, userID);
+            ps.setInt(2, userID);
+            ps.setString(3, listName);
+            int rowCount = ps.executeUpdate();
+            connection.commit();
+
+
+            ps.close();
+            return rowCount == 1;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
+
     public void login() {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");

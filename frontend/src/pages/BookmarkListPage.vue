@@ -21,21 +21,37 @@ api
 
 watchEffect(() => {
   if (userID.value !== null) {
-    api
-      .get(`/users/${userID.value}/bookmarkLists`)
-      .then((response) => {
-        bookmarkLists.value = response.data.bookmarkLists;
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchLists()
   }
 });
 
+function fetchLists() {
+  api
+    .get(`/users/${userID.value}/bookmarkLists`)
+    .then((response) => {
+      bookmarkLists.value = response.data.bookmarkLists;
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 const newListName = ref("");
 function createList() {
-  
+  api
+    .post(`/users/${userID.value}/bookmarkLists`, {
+      listName: newListName.value,
+    })
+    .then((response) => {
+      if (response.data.success) {
+        fetchLists();
+      }
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 </script>
 

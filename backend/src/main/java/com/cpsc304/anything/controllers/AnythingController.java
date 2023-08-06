@@ -58,6 +58,12 @@ public class AnythingController {
         return Collections.singletonMap("bookmarkLists", handler.getBookmarkLists(userID));
     }
 
+    @PostMapping("/users/{userID}/bookmarkLists")
+    public Map<String, Boolean> addBookmarkList(@RequestBody BookmarkListRequest body, @PathVariable("userID") int userID) {
+        System.out.println(body.listName);
+        return Collections.singletonMap("success", handler.addBookmarkList(userID, body.listName));
+    }
+
     @GetMapping("/bookmarkList/{userID}/{listID}/posts")
     public Map<String, Post[]> getPostsInBookmarkList(@PathVariable("userID") int userID, @PathVariable("listID") int listID) {
         return Collections.singletonMap("posts", handler.getPostsInBookmarkList(userID, listID));
