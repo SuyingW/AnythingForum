@@ -24,7 +24,7 @@ const routes = [
         component: () => import("pages/CollectionPage.vue"),
       },
       {
-        name: "collection",
+        name: "collectionContent",
         path: "collection/:id",
         component: () => import("pages/CollContentPage.vue"),
       },

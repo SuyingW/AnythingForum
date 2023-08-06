@@ -52,7 +52,7 @@ api
   });
 
 function showPosts(collectionID) {
-  $router.push({ name: "collection", params: { id: collectionID } });
+  $router.push({ name: "collectionContent", params: { id: collectionID } });
 }
 </script>
 
