@@ -27,6 +27,10 @@ const navigationItems = [
     label: "Collections",
     routeName: "collections",
   },
+  {
+    label: "Bookmark Lists",
+    routeName: "bookmarkLists",
+  },
 ];
 
 function toggleLeftDrawer() {

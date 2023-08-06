@@ -1,9 +1,6 @@
 package com.cpsc304.anything.controllers;
 
-import com.cpsc304.anything.Models.Collection;
-import com.cpsc304.anything.Models.Post;
-import com.cpsc304.anything.Models.User;
-import com.cpsc304.anything.Models.Writer;
+import com.cpsc304.anything.Models.*;
 import com.cpsc304.anything.database.DatabaseConnectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +52,16 @@ public class AnythingController {
 
     @GetMapping("/collections")
     public Map<String, Collection[]> collectionList() {return Collections.singletonMap("collections", handler.collectionList());}
+
+    @GetMapping("/users/{userID}/bookmarkLists")
+    public Map<String, BookmarkList[]> getBookmarkLists(@PathVariable("userID") int userID) {
+        return Collections.singletonMap("bookmarkLists", handler.getBookmarkLists(userID));
+    }
+
+    @GetMapping("/bookmarkList/{userID}/{listID}/posts")
+    public Map<String, Post[]> getPostsInBookmarkList(@PathVariable("userID") int userID, @PathVariable("listID") int listID) {
+        return Collections.singletonMap("posts", handler.getPostsInBookmarkList(userID, listID));
+    }
 
     @GetMapping("/showPosts")
     public Map<String, Post[]> postListInColl(@PathVariable("collectionID") int collectionID) {

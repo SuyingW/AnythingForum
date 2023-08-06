@@ -29,6 +29,11 @@ const routes = [
         component: () => import("pages/CollContentPage.vue"),
       },
       {
+        name: "bookmarkLists",
+        path: "bookmarkLists",
+        component: () => import("pages/BookmarkListPage.vue"),
+      },
+      {
         path: "admin",
         children: [
           {

@@ -1,5 +1,6 @@
 package com.cpsc304.anything.database;
 
+import com.cpsc304.anything.Models.BookmarkList;
 import com.cpsc304.anything.Models.Collection;
 import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
@@ -321,6 +322,63 @@ public class DatabaseConnectionHandler {
             ps.close();
             return result.toArray(new Post[result.size()]);
 
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public BookmarkList[] getBookmarkLists(int userID) {
+        ArrayList<BookmarkList> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT * FROM \"BookmarkList\" WHERE userID = ?");
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                BookmarkList list = new BookmarkList(rs.getInt("userID"),
+                        rs.getInt("listID"),
+                        rs.getString("listName"));
+
+                result.add(list);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new BookmarkList[result.size()]);
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Post[] getPostsInBookmarkList(int userID, int listID) {
+        ArrayList<Post> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT P.postID, P.title, P.publishDate, P.userID, P.categoryID, C.categoryName, W.alias FROM \"Post\" P, \"BookmarkListContains\" B, \"Writer\" W, \"Category\" C WHERE P.postID = B.postID AND P.userID = W.userID AND P.categoryID = C.categoryID AND B.userID = ? AND B.listID = ?");
+            ps.setInt(1, userID);
+            ps.setInt(2, listID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Post post = new Post(rs.getInt("postID"),
+                        rs.getString("title"),
+                        null,
+                        rs.getInt("categoryID"),
+                        rs.getString("categoryName"),
+                        rs.getInt("userID"),
+                        rs.getString("alias"));
+
+                result.add(post);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new Post[result.size()]);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             return null;
