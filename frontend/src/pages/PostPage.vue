@@ -21,14 +21,29 @@ api
 <template>
   <q-page padding>
     <div v-if="post !== null" class="post-container">
-      <div class="text-h4">{{ post.title }}</div>
-      <div class="writer">{{ post.alias }}</div>
-      <div class="publishDate">{{ post.publishDate }}</div>
-      <div class="text-h5">{{ post.content }}</div>
+      <h4>{{ post.title }}</h4>
+      <div class="post-metadata text-subtitle2">
+        <div class="publishDate"><span class="text-grey-8">Published on</span> {{ post.publishDate }}</div>
+        <div><span class="text-grey-8">Written by</span> {{ post.alias }}</div>
+      </div>
+      <div class="post-content text-body1">{{ post.content }}</div>
+      <div class="post-comments">
+        <div class="text-h6">Comments</div>
+        <div>To be added.</div>
+      </div>
     </div>
   </q-page>
 </template>
 
 <style lang="scss" scoped>
-
+.post-metadata {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 15px;
+}
+.post-content {
+  margin: 15px 0;
+  min-height: 200px;
+}
 </style>
