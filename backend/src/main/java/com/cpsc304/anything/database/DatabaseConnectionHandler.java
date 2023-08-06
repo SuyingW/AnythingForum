@@ -2,6 +2,7 @@ package com.cpsc304.anything.database;
 
 import com.cpsc304.anything.Models.BookmarkList;
 import com.cpsc304.anything.Models.Collection;
+import com.cpsc304.anything.Models.Count;
 import com.cpsc304.anything.Models.Post;
 import com.cpsc304.anything.Models.User;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -463,4 +464,28 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public Count[] groupBy() {
+        // count of posts in each category group by categoryName
+
+        ArrayList<Count> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT \"Category\".categoryName, COUNT(*) AS \"postCount\" FROM \"Category\" JOIN \"Post\" ON \"Post\".categoryID=\"Category\".categoryID GROUP BY \"Category\".categoryName");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Count count = new Count(rs.getString("categoryName"),
+                        rs.getInt("postCount"));
+                result.add(count);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new Count[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
 }

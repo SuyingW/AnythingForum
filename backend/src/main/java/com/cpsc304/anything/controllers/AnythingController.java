@@ -1,5 +1,10 @@
 package com.cpsc304.anything.controllers;
 
+import com.cpsc304.anything.Models.Collection;
+import com.cpsc304.anything.Models.Post;
+import com.cpsc304.anything.Models.User;
+import com.cpsc304.anything.Models.Writer;
+import com.cpsc304.anything.Models.Count;
 import com.cpsc304.anything.Models.*;
 import com.cpsc304.anything.database.DatabaseConnectionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +77,11 @@ public class AnythingController {
     @GetMapping("/showPosts")
     public Map<String, Post[]> postListInColl(@PathVariable("collectionID") int collectionID) {
         return Collections.singletonMap("posts", handler.postInColl(collectionID));
+    }
+
+    @GetMapping("/groupBy")
+    public Map<String, Count[]> groupBy() {
+        return Collections.singletonMap("counts", handler.groupBy());
     }
 
 }

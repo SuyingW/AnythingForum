@@ -28,6 +28,10 @@ const navigationItems = [
     routeName: "collections",
   },
   {
+    label: "Group By",
+    routeName: "groupBy",
+  },
+  {
     label: "Bookmark Lists",
     routeName: "bookmarkLists",
   },
