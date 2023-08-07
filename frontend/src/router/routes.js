@@ -39,6 +39,17 @@ const routes = [
         component: () => import("pages/BookmarkListPage.vue"),
       },
       {
+        name: "filterPosts",
+        path: "filterPosts",
+        component: () => import("pages/FilterPostsPage.vue"),
+      },
+      {
+        name: "filteredPosts",
+        path: "filteredPosts/:id",
+        component: () => import("pages/FilteredPostsPage.vue"),
+      },
+
+      {
         path: "admin",
         children: [
           {

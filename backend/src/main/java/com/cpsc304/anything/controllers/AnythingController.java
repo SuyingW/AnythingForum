@@ -84,4 +84,9 @@ public class AnythingController {
         return Collections.singletonMap("counts", handler.groupBy());
     }
 
+    @GetMapping("/filteredPosts/{categoryID}")
+    public Map<String, Post[]> filterPost(@PathVariable("categoryID") int categoryID) {
+        return Collections.singletonMap("posts", handler.filterPost(categoryID));
+    }
+
 }

@@ -35,6 +35,10 @@ const navigationItems = [
     label: "Bookmark Lists",
     routeName: "bookmarkLists",
   },
+  {
+    label: "Filter Posts",
+    routeName: "filterPosts",
+  },
 ];
 
 function toggleLeftDrawer() {

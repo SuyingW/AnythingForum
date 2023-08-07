@@ -489,4 +489,37 @@ public class DatabaseConnectionHandler {
             return null;
         }
     }
-}
+
+    public Post[] filterPost(int categoryID) {
+        ArrayList<Post> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"Writer\" ON \"Post\".userID=\"Writer\".userID JOIN \"Category\" ON \"Post\".categoryID=\"Category\".categoryID WHERE \"Post\".categoryID = (?)");
+            ps.setInt(1, categoryID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Post post = new Post(rs.getInt("postID"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("categoryID"),
+                        rs.getString("categoryName"),
+                        rs.getInt("userID"),
+                        rs.getString("alias"));
+                result.add(post);
+                System.out.println(post.postID);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new Post[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+
+    }
+
+
+    }

@@ -31,6 +31,12 @@ VALUES (2, 'Animal');
 INSERT INTO "Category" (categoryID, categoryName)
 VALUES (3, 'University');
 
+INSERT INTO "Category" (categoryID, categoryName)
+VALUES (5, 'Friends');
+
+INSERT INTO "Category" (categoryID, categoryName)
+VALUES (6, 'Admin');
+
 /* Writers */
 
 INSERT INTO "Writer" (userID, alias) VALUES (1, 'Diana');
@@ -52,11 +58,11 @@ teachers'' jobs much harder.', 'What about ChatGPT?', TO_DATE('2023-07-24 21:25:
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (3, 'Please do not post any offensive or inappropriate content, thanks!',
-           'Community Rules', TO_DATE('2023-07-24 21:34:13', 'YYYY-MM-DD HH24:MI:SS'), 6, 4);
+           'Community Rules', TO_DATE('2023-07-24 21:34:13', 'YYYY-MM-DD HH24:MI:SS'), 1, 4);
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (4, 'Add me as a friend and I'' ll send you a surprise.',
-           'Add friend!', TO_DATE('2023-07-24 21:39:52', 'YYYY-MM-DD HH24:MI:SS'), 5, 5);
+           'Add friend!', TO_DATE('2023-07-24 21:39:52', 'YYYY-MM-DD HH24:MI:SS'), 2, 5);
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (5, 'I really don''t know what to post.', 'Something', TO_DATE('2023-07-24

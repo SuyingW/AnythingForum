@@ -8,6 +8,7 @@ const $route = useRoute();
 const user = ref(null);
 
 const alias = ref("");
+const userID = ref("");
 
 api
   .get(`/user/${$route.params.id}`)
@@ -20,11 +21,11 @@ api
   });
 
 
-  let currentUserID = $route.params.id;
+  //et currentUserID = $route.params.id;
 
   function becomeWriter() {
     api.post("/writer", {
-      userID: currentUserID,
+      userID: userID.value,
       alias: alias.value,
     })
     .then((response) => {
@@ -43,6 +44,7 @@ api
       <q-card class="alias-card">
         <q-card-section>
           <div class="tex-h6">Add alias</div>
+          <q-input class="q-my-md" outlined v-model="userID" label="userID" />
           <q-input class="q-my-md" outlined v-model="alias" label="Alias" />
           <q-btn
             class="q-mt-md"
