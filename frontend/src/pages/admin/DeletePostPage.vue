@@ -7,14 +7,12 @@ const postID = ref("");
 
 function deletePost() {
   try {
-  api.delete(`/post/${postID.value}`);
-  console.log(`Post with ID ${postID.value} has been deleted.`);
+    api.delete(`/post/${postID.value}`);
+    console.log(`Post with ID ${postID.value} has been deleted.`);
   } catch (error) {
     console.error("Error deleting post:", error);
   }
 }
-
-
 </script>
 
 <template>
@@ -23,12 +21,7 @@ function deletePost() {
       <q-card class="deletepost-card">
         <q-card-section>
           <div class="tex-h6">Delete Post</div>
-          <q-input
-            class="q-my-md"
-            outlined
-            v-model="postID"
-            label="postID"
-          />
+          <q-input class="q-my-md" outlined v-model="postID" label="postID" />
           <q-btn
             class="q-mt-md"
             color="primary"

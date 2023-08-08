@@ -36,7 +36,7 @@ const postColumns = [
   },
   {
     name: "actions",
-    label: "Actions",
+    label: "",
     align: "left",
   },
 ];
@@ -57,6 +57,9 @@ function showContent(postID) {
   $router.push({ name: "post", params: { id: postID } });
 }
 
+function editPost(postID) {
+  $router.push({ name: "editPost", params: { id: postID } });
+}
 </script>
 
 <template>
@@ -64,19 +67,27 @@ function showContent(postID) {
     <div class="text-h5">Posts</div>
 
     <q-card class="posts-container">
-      <q-table
-      :columns="postColumns"
-      :rows="posts"
-      row-key="postID"
-      >
+      <q-table :columns="postColumns" :rows="posts" row-key="postID">
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
-            <q-btn
-            color="primary"
-            flat
-            @click="showContent(props.row.postID)"
-            label="View Content"
-            />
+            <div class="q-gutter-y-md column items-start">
+              <q-btn-group outlines>
+                <q-btn
+                  outline
+                  color="primary"
+                  @click="editPost(props.row.postID)"
+                  label="Edit"
+                  icon="update"
+                />
+                <q-btn
+                  outline
+                  color="primary"
+                  @click="showContent(props.row.postID)"
+                  label="View"
+                  icon="visibility"
+                />
+              </q-btn-group>
+            </div>
           </q-td>
         </template>
       </q-table>

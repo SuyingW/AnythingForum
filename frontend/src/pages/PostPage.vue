@@ -1,10 +1,9 @@
 <script setup>
 import { api } from "boot/axios";
-import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref } from "vue";
+import { useRoute } from "vue-router";
 
 const $route = useRoute();
-
 const post = ref(null);
 
 api
@@ -23,7 +22,9 @@ api
     <div v-if="post !== null" class="post-container">
       <h4>{{ post.title }}</h4>
       <div class="post-metadata text-subtitle2">
-        <div class="publishDate"><span class="text-grey-8">Published on</span> {{ post.publishDate }}</div>
+        <div class="publishDate">
+          <span class="text-grey-8">Published on</span> {{ post.publishDate }}
+        </div>
         <div><span class="text-grey-8">Written by</span> {{ post.alias }}</div>
       </div>
       <div class="post-content text-body1">{{ post.content }}</div>

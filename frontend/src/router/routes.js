@@ -19,6 +19,11 @@ const routes = [
         component: () => import("pages/PostPage.vue"),
       },
       {
+        name: "editPost",
+        path: "editPost/:id",
+        component: () => import("pages/EditPostPage.vue"),
+      },
+      {
         name: "collections",
         path: "collections",
         component: () => import("pages/CollectionPage.vue"),

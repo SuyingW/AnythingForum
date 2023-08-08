@@ -2,7 +2,6 @@ package com.cpsc304.anything.database;
 
 import com.cpsc304.anything.Models.*;
 import io.github.cdimascio.dotenv.Dotenv;
-import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -560,4 +559,24 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public boolean editPost(int postID, String title, String content) {
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE \"Post\" SET title= ?, content= ? WHERE postID= ?");
+            ps.setString(1, title);
+            ps.setString(2, content);
+            ps.setInt(3, postID);
+
+            int rowCount = ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+            return rowCount == 1;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
 }
+
+

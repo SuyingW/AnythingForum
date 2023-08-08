@@ -101,4 +101,10 @@ public class AnythingController {
     public void deletePost(@PathVariable("postID") int postID) {
         handler.deletePost(postID);
 }
+
+    @PostMapping("editPost/{postID}")
+    public Map<String, Boolean> editPost(@RequestBody Post post, @PathVariable ("postID") int postID) {
+        return  Collections.singletonMap("success", handler.editPost(postID, post.title, post.content));
+    }
 }
+
