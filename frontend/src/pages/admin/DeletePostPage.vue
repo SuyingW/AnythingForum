@@ -1,6 +1,5 @@
 <script setup>
 import { api } from "boot/axios";
-import { alignPropType } from "react-bootstrap/esm/types";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
