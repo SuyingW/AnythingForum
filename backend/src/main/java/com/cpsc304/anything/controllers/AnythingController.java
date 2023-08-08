@@ -87,6 +87,11 @@ public class AnythingController {
         return Collections.singletonMap("counts", handler.groupBy());
     }
 
+    @GetMapping("/avgViews")
+    public Map<String, AvgViewResult[]> getAvgViewsForPopularWriters() {
+        return Collections.singletonMap("result", handler.getAvgViewsForPopularWriters());
+    }
+
     @GetMapping("/posts/{categoryID}")
     public Map<String, Post[]> filterPost(@PathVariable("categoryID") int categoryID) {
         return Collections.singletonMap("posts", handler.filterPost(categoryID));

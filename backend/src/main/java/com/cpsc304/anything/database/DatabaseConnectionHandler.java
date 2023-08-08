@@ -425,6 +425,29 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public AvgViewResult[] getAvgViewsForPopularWriters() {
+        ArrayList<AvgViewResult> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT R.userID, AVG(R.viewCount) AS avgViews FROM \"ReadCount\" R WHERE R.userID IN (SELECT userID FROM \"Writer\" W, \"Follows\" F WHERE F.followeeID = W.userID GROUP BY W.userID HAVING COUNT(*) >= 2) GROUP BY R.userID");
+
+            while (rs.next()) {
+                AvgViewResult r = new AvgViewResult(rs.getInt("userID"),
+                        rs.getInt("avgViews"));
+
+                result.add(r);
+            }
+
+            rs.close();
+            stmt.close();
+            return result.toArray(new AvgViewResult[result.size()]);
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
     public void login() {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");

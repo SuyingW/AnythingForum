@@ -39,6 +39,11 @@ const routes = [
         component: () => import("pages/GroupByPage.vue"),
       },
       {
+        name: "avgViews",
+        path: "avgViews",
+        component: () => import("pages/AvgViewPage.vue"),
+      },
+      {
         name: "bookmarkLists",
         path: "bookmarkLists",
         component: () => import("pages/BookmarkListPage.vue"),
