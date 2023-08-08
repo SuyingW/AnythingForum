@@ -16,7 +16,8 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:9000")
 @RestController
 public class AnythingController {
-    @Autowired private DatabaseConnectionHandler handler;
+    @Autowired
+    private DatabaseConnectionHandler handler;
 
     @GetMapping("/")
     public Map<String, String> test() {
@@ -56,7 +57,9 @@ public class AnythingController {
     }
 
     @GetMapping("/collections")
-    public Map<String, Collection[]> collectionList() {return Collections.singletonMap("collections", handler.collectionList());}
+    public Map<String, Collection[]> collectionList() {
+        return Collections.singletonMap("collections", handler.collectionList());
+    }
 
     @GetMapping("/users/{userID}/bookmarkLists")
     public Map<String, BookmarkList[]> getBookmarkLists(@PathVariable("userID") int userID) {
@@ -84,9 +87,18 @@ public class AnythingController {
         return Collections.singletonMap("counts", handler.groupBy());
     }
 
-    @GetMapping("/filteredPosts/{categoryID}")
+    @GetMapping("/posts/{categoryID}")
     public Map<String, Post[]> filterPost(@PathVariable("categoryID") int categoryID) {
         return Collections.singletonMap("posts", handler.filterPost(categoryID));
     }
 
+    @GetMapping("/category")
+    public Map<String, Category[]> categoryList() {
+        return Collections.singletonMap("categories", handler.categoryList());
+    }
+
+    @DeleteMapping("/post/{postID}")
+    public void deletePost(@PathVariable("postID") int postID) {
+        handler.deletePost(postID);
+}
 }

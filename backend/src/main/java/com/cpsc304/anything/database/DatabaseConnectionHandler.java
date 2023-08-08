@@ -1,11 +1,8 @@
 package com.cpsc304.anything.database;
 
-import com.cpsc304.anything.Models.BookmarkList;
-import com.cpsc304.anything.Models.Collection;
-import com.cpsc304.anything.Models.Count;
-import com.cpsc304.anything.Models.Post;
-import com.cpsc304.anything.Models.User;
+import com.cpsc304.anything.Models.*;
 import io.github.cdimascio.dotenv.Dotenv;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,7 +18,7 @@ import java.util.Date;
  */
 public class DatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
-	//private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
+    //private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
     // Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
     //private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
@@ -55,7 +52,7 @@ public class DatabaseConnectionHandler {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select table_name from user_tables");
 
-            while(rs.next()) {
+            while (rs.next()) {
                 System.out.println(rs.getString(1));
             }
 
@@ -95,7 +92,7 @@ public class DatabaseConnectionHandler {
             System.out.println(email);
             System.out.println(userName);
             System.out.println(userPassword);
-            User user = new User(userID, userName, email, userPassword,null);
+            User user = new User(userID, userName, email, userPassword, null);
             PreparedStatement ps = connection.prepareStatement("INSERT INTO \"User\" VALUES (?,?,?,?,?)");
             java.sql.Date sqlDate = new java.sql.Date(user.getRegistrationDate().getTime());
             ps.setInt(1, user.getUserID());
@@ -128,7 +125,7 @@ public class DatabaseConnectionHandler {
                     "SELECT * FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 User user = new User(rs.getInt("userID"),
                         rs.getString("userName"),
                         rs.getString("email"),
@@ -158,7 +155,7 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"Writer\" ON \"Post\".userID=\"Writer\".userID JOIN \"Category\" ON \"Post\".categoryID=\"Category\".categoryID");
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Post post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         rs.getString("content"),
@@ -170,9 +167,9 @@ public class DatabaseConnectionHandler {
                 System.out.println(post.postID);
             }
 
-                rs.close();
-                ps.close();
-                return result.toArray(new Post[result.size()]);
+            rs.close();
+            ps.close();
+            return result.toArray(new Post[result.size()]);
 
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
@@ -246,7 +243,7 @@ public class DatabaseConnectionHandler {
             Post post = null;
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         rs.getString("content"),
@@ -268,6 +265,29 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public Category[] categoryList() {
+        ArrayList<Category> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Category\"");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Category category = new Category(rs.getInt("categoryID"),
+                        rs.getString("categoryName"));
+
+                result.add(category);
+            }
+            rs.close();
+            ps.close();
+            return result.toArray(new Category[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
 
     public Collection[] collectionList() {
         // return the list of all collections with the alias
@@ -278,7 +298,7 @@ public class DatabaseConnectionHandler {
                     "SELECT * FROM \"Collection\" JOIN \"Writer\" on \"Collection\".userID = \"Writer\".userID");
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Collection coll = new Collection(rs.getInt("collectionID"),
                         rs.getString("title"),
                         rs.getInt("userID"),
@@ -309,7 +329,7 @@ public class DatabaseConnectionHandler {
             ps.setInt(1, collectionID);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Post post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         rs.getString("content"),
@@ -339,7 +359,7 @@ public class DatabaseConnectionHandler {
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 BookmarkList list = new BookmarkList(rs.getInt("userID"),
                         rs.getInt("listID"),
                         rs.getString("listName"));
@@ -366,7 +386,7 @@ public class DatabaseConnectionHandler {
             ps.setInt(2, listID);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Post post = new Post(rs.getInt("postID"),
                         rs.getString("title"),
                         null,
@@ -427,7 +447,7 @@ public class DatabaseConnectionHandler {
     }
 
     private void rollbackConnection() {
-        try  {
+        try {
             connection.rollback();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
@@ -451,8 +471,8 @@ public class DatabaseConnectionHandler {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select table_name from user_tables");
 
-            while(rs.next()) {
-                if(rs.getString(1).toLowerCase().equals("branch")) {
+            while (rs.next()) {
+                if (rs.getString(1).toLowerCase().equals("branch")) {
                     stmt.execute("DROP TABLE branch");
                     break;
                 }
@@ -474,7 +494,7 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = connection.prepareStatement("SELECT \"Category\".categoryName, COUNT(*) AS \"postCount\" FROM \"Category\" JOIN \"Post\" ON \"Post\".categoryID=\"Category\".categoryID GROUP BY \"Category\".categoryName");
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Count count = new Count(rs.getString("categoryName"),
                         rs.getInt("postCount"));
                 result.add(count);
@@ -518,8 +538,26 @@ public class DatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             return null;
         }
-
     }
 
 
+    public void deletePost(int postID) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM \"Post\" WHERE postID=(?)");
+            ps.setInt(1, postID);
+
+            int rowCount = ps.executeUpdate();
+            if (rowCount == 0) {
+                System.out.println(WARNING_TAG + "Post" + postID + " does not exist!");
+            }
+
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
     }
+
+}
