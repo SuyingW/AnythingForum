@@ -1,11 +1,18 @@
 <script setup>
 import { api } from "boot/axios";
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 
 const bookmarkLists = ref([]);
 const userOptions = ref([]);
 const userID = ref(null);
+const userName = computed(() => {
+  if (userID.value === null) {
+    return "";
+  }
+  const user = userOptions.value.find((user) => user.value === userID.value);
+  return user.label;
+});
 
 api
   .get("/users")
@@ -53,6 +60,26 @@ function createList() {
       console.log(error);
     });
 }
+
+const showList = ref(false);
+const currentList = ref(null);
+const listPosts = ref([]);
+function fetchPosts() {
+  api
+    .get(`/bookmarkList/${userID.value}/${currentList.value.listID}/posts`)
+    .then((response) => {
+      listPosts.value = response.data.posts;
+      console.log(response.data);
+      showList.value = true;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+function handleListClick(list) {
+  currentList.value = list
+  fetchPosts()
+}
 </script>
 
 <template>
@@ -69,8 +96,9 @@ function createList() {
         <div class="text-body1">This user has no bookmark lists.</div>
       </q-card-section>
       <q-card-section v-else>
-        <q-list>
-          <q-item clickable v-ripple v-for="bookmarkList in bookmarkLists" :key="bookmarkList.listID">
+        <div class="text-h6 q-mb-sm">{{ userName }}'s Bookmark Lists</div>
+        <q-list bordered separator>
+          <q-item clickable v-ripple v-for="bookmarkList in bookmarkLists" :key="bookmarkList.listID" @click="handleListClick(bookmarkList)">
             <q-item-section>
               {{ bookmarkList.listName }}
             </q-item-section>
@@ -78,6 +106,23 @@ function createList() {
         </q-list>
       </q-card-section>
     </q-card>
+    <q-dialog v-model="showList">
+      <q-card style="width: 700px; max-width: 80vw;">
+        <q-card-section>
+          <div class="text-h6 q-mb-sm">{{ currentList.listName }}</div>
+          <q-list bordered separator v-if="listPosts.length !== 0">
+            <q-item clickable v-ripple v-for="post in listPosts" :key="post.postID">
+              <q-item-section>
+                {{ post.title }}
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <div class="text-body1" v-else>
+            This list is empty.
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
     <hr />
     <div class="text-h6 q-my-md">New Bookmark List</div>
     <q-input outlined v-model="newListName" label="List Name"></q-input>
