@@ -1,4 +1,4 @@
-<!-- <script setup>
+<script setup>
 import { api } from "boot/axios";
 import { alignPropType } from "react-bootstrap/esm/types";
 import { ref } from "vue";
@@ -7,7 +7,12 @@ import { useRouter } from "vue-router";
 const postID = ref("");
 
 function deletePost() {
-  api.delete(`/post/${}`)
+  try {
+  api.delete(`/post/${postID.value}`);
+  console.log(`Post with ID ${postID.value} has been deleted.`);
+  } catch (error) {
+    console.error("Error deleting post:", error);
+  }
 }
 
 
@@ -28,7 +33,7 @@ function deletePost() {
           <q-btn
             class="q-mt-md"
             color="primary"
-            label="Filter"
+            label="Delete"
             @click="deletePost"
           />
         </q-card-section>
@@ -41,4 +46,4 @@ function deletePost() {
 .filterposts-container {
   margin-top: 30px;
 }
-</style> -->
+</style>
