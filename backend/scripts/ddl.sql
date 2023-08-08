@@ -130,3 +130,10 @@ CREATE TABLE "PostHas" (
   FOREIGN KEY (tagID) REFERENCES "Tag"
     ON DELETE CASCADE
 );
+
+/* Views */
+
+CREATE VIEW "ReadCount" AS
+    SELECT P.postID, W.userID, COUNT(R.postID) AS viewCount FROM "Reads" R RIGHT JOIN "Post" P ON R.postID = P.postID
+    RIGHT JOIN "Writer" W ON P.userID = W.userID
+    GROUP BY P.postID, W.userID;
