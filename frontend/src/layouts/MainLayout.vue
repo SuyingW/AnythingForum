@@ -39,6 +39,10 @@ const navigationItems = [
     label: "Filter Posts",
     routeName: "filterPosts",
   },
+  {
+    label: "Delete Post",
+    routeName: "delete",
+  },
 ];
 
 function toggleLeftDrawer() {

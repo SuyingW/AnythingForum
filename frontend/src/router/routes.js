@@ -67,6 +67,11 @@ const routes = [
             path: "user/:id",
             component: () => import("pages/admin/AliasPage.vue"),
           },
+          {
+            name: "delete",
+            path: "delete",
+            component: () => import("pages/admin/DeletePostPage.vue"),
+          },
         ],
       },
     ],
