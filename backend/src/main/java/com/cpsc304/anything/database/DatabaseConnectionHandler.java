@@ -1,6 +1,7 @@
 package com.cpsc304.anything.database;
 
 import com.cpsc304.anything.Models.*;
+import com.cpsc304.anything.Models.Collection;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.Connection;
@@ -9,8 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 /**
  * This class handles all database related transactions
@@ -25,6 +25,8 @@ public class DatabaseConnectionHandler {
 
     private Connection connection = null;
 
+    private HashMap<String, String> allowedPostCols = new HashMap<>();
+
     public DatabaseConnectionHandler() {
         try {
             // Load the Oracle JDBC driver
@@ -33,6 +35,15 @@ public class DatabaseConnectionHandler {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
+
+        allowedPostCols.put("postID", "P.postID");
+        allowedPostCols.put("userID", "W.userID");
+        allowedPostCols.put("categoryID", "C.categoryID");
+        allowedPostCols.put("categoryName", "C.categoryName");
+        allowedPostCols.put("title", "P.title");
+        allowedPostCols.put("content", "P.content");
+        allowedPostCols.put("alias", "W.alias");
+        allowedPostCols.put("publishDate", "P.publishDate");
     }
 
     public void close() {
@@ -145,27 +156,55 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public Post[] postList() {
+    public Post[] postList(String columns) {
         ArrayList<Post> result = new ArrayList<>();
+        StringBuilder queryStr = new StringBuilder("SELECT");
+        int numSelected = 0;
+        String[] cols = columns.split(",");
+        HashSet<String> selectedCols = new HashSet<>();
+        for (String col : cols) {
+            String mappedCol = allowedPostCols.get(col);
+            if (mappedCol != null) {
+                if (numSelected > 0) {
+                    queryStr.append(", ");
+                } else {
+                    queryStr.append(" ");
+                }
+                queryStr.append(mappedCol);
+                numSelected++;
+                selectedCols.add(col);
+            }
+        }
+        if (numSelected == 0) {
+            return null;
+        }
+        queryStr.append(" FROM \"Post\" P JOIN \"Writer\" W ON P.userID=W.userID JOIN \"Category\" C ON P.categoryID=C.categoryID");
+        System.out.println(queryStr.toString());
 
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"Post\" JOIN \"Writer\" ON \"Post\".userID=\"Writer\".userID JOIN \"Category\" ON \"Post\".categoryID=\"Category\".categoryID");
-            ResultSet rs = ps.executeQuery();
+            Statement stmt = connection.createStatement();
+//            System.out.println("SELECT P.postID, P.title, W.alias FROM \"Post\" P, \"Writer\" W, \"Category\" C WHERE P.userID=W.userID AND P.categoryID=C.categoryID");
+//            ResultSet rs = stmt.executeQuery("SELECT P.title FROM \"Post\" P, \"Writer\" W, \"Category\" C WHERE P.userID=W.userID AND P.categoryID=C.categoryID");
+            ResultSet rs = stmt.executeQuery(queryStr.toString());
+
+//            PreparedStatement ps = connection.prepareStatement(queryStr.toString());
+//            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Post post = new Post(rs.getInt("postID"),
-                        rs.getString("title"),
-                        rs.getString("content"),
-                        rs.getInt("categoryID"),
-                        rs.getString("categoryName"),
-                        rs.getInt("userID"),
-                        rs.getString("alias"));
+                Post post = new Post(selectedCols.contains("postID") ? rs.getInt("postID") : null,
+                        selectedCols.contains("title") ? rs.getString("title") : null,
+                        selectedCols.contains("content") ? rs.getString("content") : null,
+                        selectedCols.contains("categoryID") ? rs.getInt("categoryID") : null,
+                        selectedCols.contains("categoryName") ? rs.getString("categoryName") : null,
+                        selectedCols.contains("userID") ? rs.getInt("userID") : null,
+                        selectedCols.contains("alias") ? rs.getString("alias") : null,
+                        selectedCols.contains("publishDate") ? rs.getDate("publishDate") : null);
                 result.add(post);
                 System.out.println(post.postID);
             }
 
             rs.close();
-            ps.close();
+            stmt.close();
             return result.toArray(new Post[result.size()]);
 
         } catch (SQLException e) {
@@ -209,10 +248,8 @@ public class DatabaseConnectionHandler {
                         rs.getInt("categoryID"),
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
-                        rs.getString("alias"));
-                Date publishTime = rs.getDate("publishDate");
-                post.setPublishDate(publishTime);
-                System.out.println(post.getPostID());
+                        rs.getString("alias"),
+                        rs.getDate("publishDate"));
             }
 
             rs.close();
@@ -295,7 +332,8 @@ public class DatabaseConnectionHandler {
                         rs.getInt("collectionID"),
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
-                        rs.getString("alias"));
+                        rs.getString("alias"),
+                        rs.getDate("publishDate"));
                 result.add(post);
             }
 
@@ -352,7 +390,8 @@ public class DatabaseConnectionHandler {
                         rs.getInt("categoryID"),
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
-                        rs.getString("alias"));
+                        rs.getString("alias"),
+                        rs.getDate("publishDate"));
 
                 result.add(post);
             }
@@ -517,7 +556,8 @@ public class DatabaseConnectionHandler {
                         rs.getInt("categoryID"),
                         rs.getString("categoryName"),
                         rs.getInt("userID"),
-                        rs.getString("alias"));
+                        rs.getString("alias"),
+                        rs.getDate("publishDate"));
                 result.add(post);
                 System.out.println(post.postID);
             }

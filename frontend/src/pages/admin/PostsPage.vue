@@ -1,14 +1,14 @@
 <script setup>
 import { api } from "boot/axios";
-import { ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 
 const $router = useRouter();
 
-const postColumns = [
+const allPostColumns = [
   {
     name: "postID",
-    label: "postID",
+    label: "Post ID",
     field: "postID",
     align: "left",
     sortable: true,
@@ -21,9 +21,30 @@ const postColumns = [
     sortable: true,
   },
   {
+    name: "userID",
+    label: "User ID",
+    field: "userID",
+    align: "left",
+    sortable: true,
+  },
+  {
     name: "alias",
     label: "Writer",
     field: "alias",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "publishDate",
+    label: "Publish Date",
+    field: "publishDate",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "categoryID",
+    label: "Category ID",
+    field: "categoryID",
     align: "left",
     sortable: true,
   },
@@ -35,23 +56,73 @@ const postColumns = [
     sortable: true,
   },
   {
+    name: "content",
+    label: "Content",
+    field: "content",
+    align: "left",
+    sortable: true,
+  },
+  {
     name: "actions",
     label: "",
     align: "left",
   },
 ];
+const columnOptions = [
+{
+    value: "postID",
+    label: "Post ID",
+  },
+  {
+    value: "title",
+    label: "Title",
+  },
+  {
+    value: "userID",
+    label: "User ID",
+  },
+  {
+    value: "alias",
+    label: "Writer",
+  },
+  {
+    value: "publishDate",
+    label: "Publish Date",
+  },
+  {
+    value: "categoryID",
+    label: "Category ID",
+  },
+  {
+    value: "categoryName",
+    label: "Category",
+  },
+  {
+    value: "content",
+    label: "Content",
+  },
+];
+const filteredColumns = ref(["postID", "title", "alias", "categoryName"]);
+const postColumns = computed(() => allPostColumns.filter(c => !c.field || filteredColumns.value.includes(c.field)));
 
 const posts = ref([]);
 
-api
-  .get("/posts")
-  .then((response) => {
-    posts.value = response.data.posts;
-    console.log(response.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+const isLoading = ref(true);
+watchEffect(() => {
+  isLoading.value = true;
+  api
+    .get(`/posts?columns=${filteredColumns.value.join(",")}`)
+    .then((response) => {
+      posts.value = response.data.posts;
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+});
 
 function showContent(postID) {
   $router.push({ name: "post", params: { id: postID } });
@@ -66,8 +137,15 @@ function editPost(postID) {
   <q-page padding>
     <div class="text-h5">Posts</div>
 
+    <div class="text-body1 q-mt-md">Project selected columns:</div>
+    <q-option-group
+      v-model="filteredColumns"
+      :options="columnOptions"
+      type="checkbox"
+    />
+
     <q-card class="posts-container">
-      <q-table :columns="postColumns" :rows="posts" row-key="postID">
+      <q-table :columns="postColumns" :rows="posts" row-key="postID" :loading="isLoading">
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <div class="q-gutter-y-md column items-start">

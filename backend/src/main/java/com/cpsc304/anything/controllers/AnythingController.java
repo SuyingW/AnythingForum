@@ -41,8 +41,8 @@ public class AnythingController {
     }
 
     @GetMapping("/posts")
-    public Map<String, Post[]> postList() {
-        return Collections.singletonMap("posts", handler.postList());
+    public Map<String, Post[]> postList(@RequestParam String columns) {
+        return Collections.singletonMap("posts", handler.postList(columns));
     }
 
     @GetMapping("/post/{postID}")
