@@ -106,5 +106,10 @@ public class AnythingController {
     public Map<String, Boolean> editPost(@RequestBody Post post, @PathVariable ("postID") int postID) {
         return  Collections.singletonMap("success", handler.editPost(postID, post.title, post.content));
     }
+
+    @GetMapping("/userallcate")
+    public Map<String, UserAllCate[]> division() {
+        return Collections.singletonMap("userallcate", handler.division());
+    }
 }
 

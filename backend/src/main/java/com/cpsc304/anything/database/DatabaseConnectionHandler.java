@@ -577,6 +577,36 @@ public class DatabaseConnectionHandler {
             return false;
         }
     }
+
+
+    //Find all users who make posts in all categories
+    public UserAllCate[] division() {
+        ArrayList<UserAllCate> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT U.userID, U.email, U.userName, W.alias FROM \"User\" U, \"Writer\" W WHERE NOT EXISTS (SELECT categoryID FROM \"Category\" C WHERE NOT EXISTS (SELECT categoryID FROM \"Post\" P WHERE U.userID = P.userID AND C.categoryID = P.categoryID and U.userID=W.userID))");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                UserAllCate user = new UserAllCate(rs.getInt("userID"),
+                        rs.getString("alias"),
+                        rs.getString("userName"),
+                        rs.getString("email")
+                );
+                result.add(user);
+                System.out.println(user.userID);
+            }
+
+            rs.close();
+            ps.close();
+            return result.toArray(new UserAllCate[result.size()]);
+
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
 }
 
 

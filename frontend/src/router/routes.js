@@ -53,7 +53,11 @@ const routes = [
         path: "filteredPosts/:id",
         component: () => import("pages/FilteredPostsPage.vue"),
       },
-
+      {
+        name: "userAllCate",
+        path: "userAllCate",
+        component: () => import("pages/UserAllCatePage.vue"),
+      },
       {
         path: "admin",
         children: [
@@ -90,4 +94,7 @@ const routes = [
   },
 ];
 
+
 export default routes;
+
+

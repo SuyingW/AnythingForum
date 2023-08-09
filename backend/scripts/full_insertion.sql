@@ -58,15 +58,33 @@ teachers'' jobs much harder.', 'What about ChatGPT?', TO_DATE('2023-07-24 21:25:
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (3, 'Please do not post any offensive or inappropriate content, thanks!',
-           'Community Rules', TO_DATE('2023-07-24 21:34:13', 'YYYY-MM-DD HH24:MI:SS'), 1, 4);
+           'Community Rules', TO_DATE('2023-07-24 21:34:13', 'YYYY-MM-DD HH24:MI:SS'), 1, 3);
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (4, 'Add me as a friend and I'' ll send you a surprise.',
-           'Add friend!', TO_DATE('2023-07-24 21:39:52', 'YYYY-MM-DD HH24:MI:SS'), 2, 5);
+           'Add friend!', TO_DATE('2023-07-24 21:39:52', 'YYYY-MM-DD HH24:MI:SS'), 5, 2);
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (5, 'I really don''t know what to post.', 'Something', TO_DATE('2023-07-24
     21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 3, 1);
+
+INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
+VALUES (6, 'I want to do a CS master''s degree in Canada, hopefully master of science in computer science (MSC) at UBC. Does anyone know where I can find the past admission statistics for this program? ','CS Graduate Program Admission', TO_DATE('2023-08-02
+    21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 1, 2);
+
+INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
+VALUES (7, 'How do I find my first coop job? Any advice would be appreciated.', 'UBC First Coop Term', TO_DATE('2023-07-29
+    21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 3, 2);
+
+INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
+VALUES (8, 'Look at my dog! She is 30 years old', 'My Dog', TO_DATE('2023-07-30
+    21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 2, 2);
+
+INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
+VALUES (9, 'Can the admin stop deleting my posts??????', 'DON''T DELETE MY POSTS', TO_DATE('2023-07-31
+    21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 6, 2);
+
+
 
 /* Tags */
 

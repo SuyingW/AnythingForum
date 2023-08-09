@@ -43,6 +43,10 @@ const navigationItems = [
     label: "Delete Post",
     routeName: "delete",
   },
+  {
+    label: "Users Make Posts in All Categories",
+    routeName: "userAllCate",
+  },
 ];
 
 function toggleLeftDrawer() {
@@ -54,6 +58,7 @@ function handleRouteClick(name) {
   }
 }
 </script>
+
 
 <template>
   <q-layout view="hHh Lpr lFf">
