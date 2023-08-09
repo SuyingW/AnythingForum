@@ -58,7 +58,7 @@ function showPosts(collectionID) {
 
 <template>
   <q-page padding>
-    <div class="text-h5">Posts</div>
+    <div class="text-h5">Collections</div>
 
     <q-card class="collections-container">
       <q-table :columns="collColumns" :rows="colls" row-key="collectionID">

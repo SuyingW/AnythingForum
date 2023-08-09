@@ -1,3 +1,149 @@
+/* create tables */
+
+CREATE TABLE "Category" (
+                            categoryID INT PRIMARY KEY,
+                            categoryName VARCHAR2(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE "User" (
+                        userID INT PRIMARY KEY,
+                        registrationDate DATE NOT NULL,
+                        userName VARCHAR2(20) NOT NULL,
+                        email VARCHAR2(320) NOT NULL,
+                        userPassword VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE "Post" (
+                        postID INT PRIMARY KEY,
+                        content VARCHAR2(4000) NOT NULL,
+                        title VARCHAR2(100)	NOT NULL,
+                        publishDate DATE NOT NULL,
+                        categoryID INT NOT NULL,
+                        userID INT NOT NULL,
+                        FOREIGN KEY (categoryID) REFERENCES "Category",
+                        FOREIGN KEY (userID) REFERENCES "User"
+                            ON DELETE CASCADE
+);
+
+CREATE TABLE "Tag" (
+                       tagID INT PRIMARY KEY,
+                       tagName VARCHAR2(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE "Collection" (
+                              collectionID INT PRIMARY KEY,
+                              title VARCHAR2(100) NOT NULL,
+                              userID INT NOT NULL,
+                              FOREIGN KEY (userID) REFERENCES "User"
+                                  ON DELETE CASCADE
+);
+
+CREATE TABLE "Writer" (
+                          userID INT PRIMARY KEY,
+                          alias VARCHAR2(50) DEFAULT 'Anonymous',
+                          FOREIGN KEY (userID) REFERENCES "User"
+                              ON DELETE CASCADE
+);
+
+CREATE TABLE "BookmarkList" (
+                                userID INT,
+                                listID INT,
+                                listName VARCHAR2(50) NOT NULL,
+                                PRIMARY KEY (userID, listID),
+                                FOREIGN KEY (userID) REFERENCES "User"
+                                    ON DELETE CASCADE
+);
+
+CREATE TABLE "Comment" (
+                           commentID INT PRIMARY KEY,
+                           content VARCHAR2(1000) NOT NULL,
+                           replyingToID INT,
+                           postID INT NOT NULL,
+                           userID INT NOT NULL,
+                           commentDate DATE NOT NULL,
+                           FOREIGN KEY (replyingToID) REFERENCES "Comment"
+                               ON DELETE CASCADE,
+                           FOREIGN KEY (postID) REFERENCES "Post"
+                               ON DELETE CASCADE,
+                           FOREIGN KEY (userID) REFERENCES "User"
+                               ON DELETE CASCADE
+);
+
+CREATE TABLE "Message" (
+                           messageID INT PRIMARY KEY,
+                           messageDate TIMESTAMP NOT NULL,
+                           content VARCHAR2(1000) NOT NULL,
+                           fromUserID INT NOT NULL,
+                           toUserID INT NOT NULL,
+                           FOREIGN KEY (fromUserID) REFERENCES "User"
+                               ON DELETE CASCADE,
+                           FOREIGN KEY (toUserID) REFERENCES "User"
+                               ON DELETE CASCADE
+);
+
+CREATE TABLE "Follows" (
+                           followerID INT,
+                           followeeID INT,
+                           PRIMARY KEY (followerID, followeeID),
+                           FOREIGN KEY (followerID) REFERENCES "User"
+                               ON DELETE CASCADE,
+                           FOREIGN KEY (followeeID) REFERENCES "User"
+                               ON DELETE CASCADE
+);
+
+CREATE TABLE "Reads" (
+                         userID INT,
+                         postID INT,
+                         readDate DATE NOT NULL,
+                         PRIMARY KEY (userID, postID),
+                         FOREIGN KEY (userID) REFERENCES "User"
+                             ON DELETE CASCADE,
+                         FOREIGN KEY (postID) REFERENCES "Post"
+                             ON DELETE CASCADE
+);
+
+CREATE TABLE "CollectionContains" (
+                                      collectionID INT,
+                                      postID INT,
+                                      PRIMARY KEY (collectionID, postID),
+                                      FOREIGN KEY (collectionID) REFERENCES "User"
+                                          ON DELETE CASCADE,
+                                      FOREIGN KEY (postID) REFERENCES "Post"
+                                          ON DELETE CASCADE
+);
+
+CREATE TABLE "BookmarkListContains" (
+                                        userID INT,
+                                        listID INT,
+                                        postID INT,
+                                        PRIMARY KEY (userID, listID, postID),
+                                        FOREIGN KEY (userID, listID) REFERENCES "BookmarkList"
+                                            ON DELETE CASCADE,
+                                        FOREIGN KEY (postID) REFERENCES "Post"
+                                            ON DELETE CASCADE
+);
+
+CREATE TABLE "PostHas" (
+                           postID INT,
+                           tagID INT,
+                           PRIMARY KEY (postID, tagID),
+                           FOREIGN KEY (postID) REFERENCES "Post"
+                               ON DELETE CASCADE,
+                           FOREIGN KEY (tagID) REFERENCES "Tag"
+                               ON DELETE CASCADE
+);
+
+/* Views */
+
+CREATE VIEW "ReadCount" AS
+SELECT P.postID, W.userID, COUNT(R.postID) AS viewCount FROM "Reads" R RIGHT JOIN "Post" P ON R.postID = P.postID
+                                                                       RIGHT JOIN "Writer" W ON P.userID = W.userID
+GROUP BY P.postID, W.userID;
+
+
+
+/* insert tuples */
+
 /* Users */
 
 INSERT INTO "User" (userID, registrationDate, userName, email, userPassword)
@@ -19,6 +165,15 @@ INSERT INTO "User" (userID, registrationDate, userName, email, userPassword)
 INSERT INTO "User" (userID, registrationDate, userName, email, userPassword)
   VALUES (5, TO_DATE('2023-07-23', 'YYYY-MM-DD'), 'Visitor', 'visitor',
 'admin12345');
+
+INSERT INTO "User" (userID, registrationDate, userName, email, userPassword)
+  VALUES (6, TO_DATE('2023-07-25', 'YYYY-MM-DD'), 'Visitor2', 'visitor2',
+        'asfh3yj');
+
+INSERT INTO "User" (userID, registrationDate, userName, email, userPassword)
+VALUES (7, TO_DATE('2023-07-26', 'YYYY-MM-DD'), 'Visitor3', 'visitor3',
+        'asfh3yj');
+
 
 /* Categories */
 
@@ -137,6 +292,17 @@ INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, comment
 INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, commentDate)
   VALUES (5, 'This is just a comment..', 3, 3, 5, TO_DATE('2023-07-25 12:54:33', 
 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, commentDate)
+  VALUES (6, 'I agree.', NULL, 8, 6, TO_DATE('2023-07-25 13:54:33', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, commentDate)
+  VALUES (7, 'Yeah', NULL, 9, 6, TO_DATE('2023-07-26 12:42:33', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, commentDate)
+  VALUES (9, 'Hi', NULL, 1, 7, TO_DATE('2023-07-26 12:43:33', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, commentDate)
+  VALUES (10, 'Hi', NULL, 2, 7, TO_DATE('2023-07-26 12:43:33', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Comment" (commentID, content, replyingToID, postID, userID, commentDate)
+  VALUES (11, 'Hi', NULL, 3, 7, TO_DATE('2023-07-26 12:43:33', 'YYYY-MM-DD HH24:MI:SS'));
+
 
 /* Messages */
 
@@ -158,6 +324,7 @@ INSERT INTO "Follows" (followerID, followeeID) VALUES (1, 3);
 INSERT INTO "Follows" (followerID, followeeID) VALUES (2, 1);
 INSERT INTO "Follows" (followerID, followeeID) VALUES (3, 1);
 INSERT INTO "Follows" (followerID, followeeID) VALUES (2, 3);
+INSERT INTO "Follows" (followerID, followeeID) VALUES (3, 2);
 
 /* Reads */
 
@@ -171,6 +338,19 @@ INSERT INTO "Reads" (userID, postID, readDate)
  VALUES (5, 2, TO_DATE('2023-07-25 20:13:42', 'YYYY-MM-DD HH24:MI:SS'));
 INSERT INTO "Reads" (userID, postID, readDate) 
  VALUES (4, 3, TO_DATE('2023-07-25 22:18:42', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Reads" (userID, postID, readDate)
+ VALUES (1, 4, TO_DATE('2023-07-25 19:45:12', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Reads" (userID, postID, readDate)
+ VALUES (2, 7, TO_DATE('2023-07-25 18:30:21', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Reads" (userID, postID, readDate)
+ VALUES (6, 5, TO_DATE('2023-07-25 17:15:39', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Reads" (userID, postID, readDate)
+ VALUES (3, 8, TO_DATE('2023-07-25 15:20:18', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Reads" (userID, postID, readDate)
+ VALUES (4, 9, TO_DATE('2023-07-25 14:10:57', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO "Reads" (userID, postID, readDate)
+ VALUES (5, 6, TO_DATE('2023-07-25 13:05:36', 'YYYY-MM-DD HH24:MI:SS'));
+
 
 /* CollectionContains */
 
