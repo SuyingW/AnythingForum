@@ -44,6 +44,11 @@ const routes = [
         component: () => import("pages/AvgViewPage.vue"),
       },
       {
+        name: "potentialSpam",
+        path: "potentialSpam",
+        component: () => import("pages/PotentialSpamPage.vue"),
+      },
+      {
         name: "bookmarkLists",
         path: "bookmarkLists",
         component: () => import("pages/BookmarkListPage.vue"),

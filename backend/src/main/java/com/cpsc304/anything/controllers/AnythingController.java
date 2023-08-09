@@ -92,6 +92,11 @@ public class AnythingController {
         return Collections.singletonMap("result", handler.getAvgViewsForPopularWriters());
     }
 
+    @GetMapping("/potentialSpam")
+    public Map<String, SpamResult[]> getPotentialSpamUsers() {
+        return Collections.singletonMap("result", handler.getPotentialSpamUsers());
+    }
+
     @GetMapping("/posts/{categoryID}")
     public Map<String, Post[]> filterPost(@PathVariable("categoryID") int categoryID) {
         return Collections.singletonMap("posts", handler.filterPost(categoryID));

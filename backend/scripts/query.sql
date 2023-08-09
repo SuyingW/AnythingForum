@@ -29,6 +29,9 @@ SELECT * FROM "Post" JOIN "CollectionContains" ON "Post".postID = "CollectionCon
 SELECT "Category".categoryName, COUNT(*) AS "postCount" FROM "Category" JOIN "Post" ON "Post".categoryID="Category".categoryID GROUP BY "Category".categoryName;
 
 /*Aggregation with Having*/
+SELECT C.userID, COUNT(*) AS numComments FROM "Comment" C GROUP BY C.userID HAVING COUNT(*) >= 2 AND 0 = (
+    SELECT COUNT(*) FROM "Follows" F WHERE F.followeeID = C.userID
+);
 
 /* Nested Aggregation with Group By */
 SELECT R.userID, AVG(R.viewCount) AS avgViews FROM "ReadCount" R WHERE R.userID IN (

@@ -40,6 +40,10 @@ const navigationItems = [
     routeName: "avgViews",
   },
   {
+    label: "Potential Spam",
+    routeName: "potentialSpam",
+  },
+  {
     label: "Filter Posts",
     routeName: "filterPosts",
   },

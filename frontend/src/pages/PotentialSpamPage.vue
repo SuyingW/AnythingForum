@@ -11,9 +11,9 @@ const columns = [
     sortable: true,
   },
   {
-    name: "avgViews",
-    label: "Average Views",
-    field: "avgViews",
+    name: "numComments",
+    label: "Number of Comments Made",
+    field: "numComments",
     align: "left",
     sortable: true,
   },
@@ -21,9 +21,9 @@ const columns = [
 
 const result = ref([]);
 
-function getAvgViews() {
+function getPotentialSpam() {
   api
-    .get("/avgViews")
+    .get("/potentialSpam")
     .then((response) => {
       result.value = response.data.result;
       console.log(response.data);
@@ -36,8 +36,8 @@ function getAvgViews() {
 
 <template>
   <q-page padding>
-    <div class="text-h5">Average Post Views For Popular Writers</div>
-    <div class="text-body1">The average user view count across all their posts, for each writer that has more than 1 followers.</div>
+    <div class="text-h5">Potential Spam Users</div>
+    <div class="text-body1">These users have made more than one comment but do not have any followers.</div>
 
     <q-card class="results-container">
       <q-table
@@ -52,7 +52,7 @@ function getAvgViews() {
       class="q-mt-md"
       color="primary"
       label="Get Results"
-      @click="getAvgViews"
+      @click="getPotentialSpam"
     />
   </q-page>
 </template>
