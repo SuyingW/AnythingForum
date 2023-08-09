@@ -32,10 +32,10 @@ INSERT INTO "Category" (categoryID, categoryName)
 VALUES (3, 'University');
 
 INSERT INTO "Category" (categoryID, categoryName)
-VALUES (5, 'Friends');
+VALUES (4, 'Friends');
 
 INSERT INTO "Category" (categoryID, categoryName)
-VALUES (6, 'Admin');
+VALUES (5, 'Admin');
 
 /* Writers */
 
@@ -62,7 +62,7 @@ VALUES (3, 'Please do not post any offensive or inappropriate content, thanks!',
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (4, 'Add me as a friend and I'' ll send you a surprise.',
-           'Add friend!', TO_DATE('2023-07-24 21:39:52', 'YYYY-MM-DD HH24:MI:SS'), 5, 2);
+           'Add friend!', TO_DATE('2023-07-24 21:39:52', 'YYYY-MM-DD HH24:MI:SS'), 4, 2);
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (5, 'I really don''t know what to post.', 'Something', TO_DATE('2023-07-24
@@ -82,7 +82,7 @@ VALUES (8, 'Look at my dog! She is 30 years old', 'My Dog', TO_DATE('2023-07-30
 
 INSERT INTO "Post" (postID, content, title, publishDate, categoryID, userID)
 VALUES (9, 'Can the admin stop deleting my posts??????', 'DON''T DELETE MY POSTS', TO_DATE('2023-07-31
-    21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 6, 2);
+    21:46:11', 'YYYY-MM-DD HH24:MI:SS'), 5, 2);
 
 
 
