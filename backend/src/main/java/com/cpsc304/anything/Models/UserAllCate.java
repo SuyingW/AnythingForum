@@ -6,6 +6,13 @@ public class UserAllCate {
     public String userName;
     public String email;
 
+    public UserAllCate(int userID, String alias, String userName, String email) {
+        this.userID = userID;
+        this.alias = alias;
+        this.userName = userName;
+        this.email = email;
+    }
+
     public int getUserID() {
         return userID;
     }
@@ -38,12 +45,6 @@ public class UserAllCate {
         this.email = email;
     }
 
-    public UserAllCate(int userID, String alias, String userName, String email) {
-        this.userID = userID;
-        this.alias = alias;
-        this.userName = userName;
-        this.email = email;
-    }
 
 
 }

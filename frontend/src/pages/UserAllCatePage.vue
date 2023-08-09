@@ -70,6 +70,7 @@ function division(postID) {
   </q-page>
 </template>
 
+
 <style lang="scss" scoped>
 .counts-container {
   margin-top: 30px;

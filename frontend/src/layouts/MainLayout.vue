@@ -53,6 +53,7 @@ const navigationItems = [
   },
 ];
 
+
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }

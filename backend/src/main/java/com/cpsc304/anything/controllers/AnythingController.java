@@ -116,5 +116,6 @@ public class AnythingController {
     public Map<String, UserAllCate[]> division() {
         return Collections.singletonMap("userallcate", handler.division());
     }
+
 }
 
