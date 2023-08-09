@@ -39,4 +39,5 @@ SELECT R.userID, AVG(R.viewCount) AS avgViews FROM "ReadCount" R WHERE R.userID 
 ) GROUP BY R.userID;
 
 /*Division*/
+SELECT U.userID, U.email, U.userName, W.alias FROM "User" U, "Writer" W WHERE NOT EXISTS (SELECT categoryID FROM "Category" C WHERE NOT EXISTS (SELECT categoryID FROM "Post" P WHERE U.userID = P.userID AND C.categoryID = P.categoryID and U.userID=W.userID));
 

@@ -118,8 +118,6 @@ public class DatabaseConnectionHandler {
         ArrayList<User> result = new ArrayList<User>();
 
         try {
-//            PreparedStatement ps = connection.prepareStatement(
-//                    "SELECT \"User\".userID, \"User\".registrationDate, \"User\".userName, \"User\".email, \"User\".userPassword, \"Writer\".alias FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
             PreparedStatement ps = connection.prepareStatement(
                     "SELECT * FROM \"User\"  LEFT JOIN \"Writer\" ON \"User\".userID = \"Writer\".userID");
             ResultSet rs = ps.executeQuery();
@@ -195,44 +193,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void deleteBranch(int branchId) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-            ps.setInt(1, branchId);
-
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
-            }
-
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
-
-    public void updateBranch(int id, String name) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE branch SET branch_name = ? WHERE branch_id = ?");
-            ps.setString(1, name);
-            ps.setInt(2, id);
-
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
-            }
-
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
 
     public Post getPost(int postID) {
         try {
@@ -499,18 +459,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void databaseSetup() {
-        dropBranchTableIfExists();
-
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)");
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
     private void dropBranchTableIfExists() {
         try {
             Statement stmt = connection.createStatement();
@@ -548,7 +496,6 @@ public class DatabaseConnectionHandler {
             rs.close();
             ps.close();
             return result.toArray(new Count[result.size()]);
-
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             return null;
@@ -652,8 +599,4 @@ public class DatabaseConnectionHandler {
             return null;
         }
     }
-
-
 }
-
-
