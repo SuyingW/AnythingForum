@@ -448,6 +448,29 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public SpamResult[] getPotentialSpamUsers() {
+        ArrayList<SpamResult> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT C.userID, COUNT(*) AS numComments FROM \"Comment\" C GROUP BY C.userID HAVING COUNT(*) >= 2 AND 0 = (SELECT COUNT(*) FROM \"Follows\" F WHERE F.followeeID = C.userID)");
+
+            while (rs.next()) {
+                SpamResult r = new SpamResult(rs.getInt("userID"),
+                        rs.getInt("numComments"));
+
+                result.add(r);
+            }
+
+            rs.close();
+            stmt.close();
+            return result.toArray(new SpamResult[result.size()]);
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return null;
+        }
+    }
+
     public void login() {
         Dotenv dotenv = Dotenv.load();
         String username = dotenv.get("ORACLE_USERNAME");
