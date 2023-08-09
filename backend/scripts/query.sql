@@ -13,6 +13,7 @@ UPDATE "Post" SET title= ?, content= ? WHERE postID= ?
 SELECT userName FROM "User" WHERE email = ? AND userPassword = ?;
 SELECT * FROM "Category";
 SELECT * FROM "BookmarkList" WHERE userID = ?;
+SELECT * FROM "Post" JOIN "Writer" ON "Post".userID="Writer".userID JOIN "Category" ON "Post".categoryID="Category".categoryID WHERE "Post".categoryID = (?);
 
 /*Projection*/
 SELECT P.postID, P.title, P.publishDate, P.userID, P.categoryID, C.categoryName, W.alias FROM "Post" P, "BookmarkListContains" B, "Writer" W, "Category" C WHERE P.postID = B.postID AND P.userID = W.userID AND P.categoryID = C.categoryID AND B.userID = ? AND B.listID = ?;
