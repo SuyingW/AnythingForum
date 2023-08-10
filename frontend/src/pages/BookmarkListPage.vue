@@ -106,7 +106,7 @@ function goToPost(postID) {
         <q-list bordered separator>
           <q-item clickable v-ripple v-for="bookmarkList in bookmarkLists" :key="bookmarkList.listID" @click="handleListClick(bookmarkList)">
             <q-item-section>
-              {{ bookmarkList.listName }}
+              {{ bookmarkList.listID }}. {{ bookmarkList.listName }}
             </q-item-section>
           </q-item>
         </q-list>
@@ -118,8 +118,14 @@ function goToPost(postID) {
           <div class="text-h6 q-mb-sm">{{ currentList.listName }}</div>
           <q-list bordered separator v-if="listPosts.length !== 0">
             <q-item clickable v-ripple v-for="post in listPosts" :key="post.postID" @click="goToPost(post.postID)">
-              <q-item-section>
-                {{ post.title }}
+              <q-item-section style="width: 100%;">
+                <div class="text-weight-medium">{{ post.title }}</div>
+                <div>
+                  <q-chip color="primary" text-color="white">ID: {{ post.postID }}</q-chip>
+                  <q-chip color="primary" text-color="white">Published: {{ post.publishDate }}</q-chip>
+                  <q-chip color="primary" text-color="white">Category: {{ post.categoryName }}</q-chip>
+                  <q-chip color="primary" text-color="white">Writer: {{ post.alias }}</q-chip>
+                </div>
               </q-item-section>
             </q-item>
           </q-list>
