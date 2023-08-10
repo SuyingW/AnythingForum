@@ -179,16 +179,10 @@ public class DatabaseConnectionHandler {
             return null;
         }
         queryStr.append(" FROM \"Post\" P JOIN \"Writer\" W ON P.userID=W.userID JOIN \"Category\" C ON P.categoryID=C.categoryID");
-        System.out.println(queryStr.toString());
 
         try {
             Statement stmt = connection.createStatement();
-//            System.out.println("SELECT P.postID, P.title, W.alias FROM \"Post\" P, \"Writer\" W, \"Category\" C WHERE P.userID=W.userID AND P.categoryID=C.categoryID");
-//            ResultSet rs = stmt.executeQuery("SELECT P.title FROM \"Post\" P, \"Writer\" W, \"Category\" C WHERE P.userID=W.userID AND P.categoryID=C.categoryID");
             ResultSet rs = stmt.executeQuery(queryStr.toString());
-
-//            PreparedStatement ps = connection.prepareStatement(queryStr.toString());
-//            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Post post = new Post(selectedCols.contains("postID") ? rs.getInt("postID") : null,
