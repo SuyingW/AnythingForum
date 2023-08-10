@@ -147,6 +147,7 @@ const postColumns = [
           :columns="postColumns"
           :rows="posts"
           row-key="postID"
+          :rows-per-page-options="[0]"
         >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">

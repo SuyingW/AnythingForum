@@ -91,9 +91,10 @@ function addAlias(userID) {
 
     <q-card class="users-container">
       <q-table
-      :columns="userColumns"
-      :rows="users"
-      row-key="userID"
+        :columns="userColumns"
+        :rows="users"
+        row-key="userID"
+        :rows-per-page-options="[0]"
       >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">

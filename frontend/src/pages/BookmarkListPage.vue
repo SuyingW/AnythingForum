@@ -3,6 +3,8 @@ import { api } from "boot/axios";
 import { computed, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 
+const $router = useRouter();
+
 const bookmarkLists = ref([]);
 const userOptions = ref([]);
 const userID = ref(null);
@@ -80,6 +82,10 @@ function handleListClick(list) {
   currentList.value = list
   fetchPosts()
 }
+
+function goToPost(postID) {
+  $router.push({ name: "post", params: { id: postID }})
+}
 </script>
 
 <template>
@@ -111,7 +117,7 @@ function handleListClick(list) {
         <q-card-section>
           <div class="text-h6 q-mb-sm">{{ currentList.listName }}</div>
           <q-list bordered separator v-if="listPosts.length !== 0">
-            <q-item clickable v-ripple v-for="post in listPosts" :key="post.postID">
+            <q-item clickable v-ripple v-for="post in listPosts" :key="post.postID" @click="goToPost(post.postID)">
               <q-item-section>
                 {{ post.title }}
               </q-item-section>

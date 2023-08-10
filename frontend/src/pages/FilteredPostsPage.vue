@@ -61,9 +61,10 @@ api
 
     <q-card class="posts-container">
       <q-table
-      :columns="postColumns"
-      :rows="filteredPosts"
-      row-key="postID"
+        :columns="postColumns"
+        :rows="filteredPosts"
+        row-key="postID"
+        :rows-per-page-options="[0]"
       >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">

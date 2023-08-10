@@ -51,7 +51,11 @@ api
     </q-card-section>
 
     <q-card v-else class="posts-container">
-      <q-table :columns="postsColumns" :rows="posts" row-key="postID">
+      <q-table
+        :columns="postsColumns"
+        :rows="posts"
+        row-key="postID"
+        :rows-per-page-options="[0]">
       </q-table>
     </q-card>
   </q-page>

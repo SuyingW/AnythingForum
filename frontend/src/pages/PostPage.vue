@@ -28,10 +28,6 @@ api
         <div><span class="text-grey-8">Written by</span> {{ post.alias }}</div>
       </div>
       <div class="post-content text-body1">{{ post.content }}</div>
-      <div class="post-comments">
-        <div class="text-h6">Comments</div>
-        <div>To be added.</div>
-      </div>
     </div>
   </q-page>
 </template>

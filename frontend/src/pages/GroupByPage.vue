@@ -43,6 +43,7 @@ function groupBy(postID) {
         :columns="countColumns"
         :rows="categories"
         row-key="categoryName"
+        :rows-per-page-options="[0]"
       >
       </q-table>
     </q-card>

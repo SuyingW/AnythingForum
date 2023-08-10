@@ -145,7 +145,13 @@ function editPost(postID) {
     />
 
     <q-card class="posts-container">
-      <q-table :columns="postColumns" :rows="posts" row-key="postID" :loading="isLoading">
+      <q-table
+        :columns="postColumns"
+        :rows="posts"
+        row-key="postID"
+        :loading="isLoading"
+        :rows-per-page-options="[0]"
+      >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <div class="q-gutter-y-md column items-start">

@@ -57,6 +57,7 @@ function division(postID) {
         :columns="userColumns"
         :rows="users"
         row-key="userID"
+        :rows-per-page-options="[0]"
       >
       </q-table>
     </q-card>

@@ -61,7 +61,12 @@ function showPosts(collectionID) {
     <div class="text-h5">Collections</div>
 
     <q-card class="collections-container">
-      <q-table :columns="collColumns" :rows="colls" row-key="collectionID">
+      <q-table
+        :columns="collColumns"
+        :rows="colls"
+        row-key="collectionID"
+        :rows-per-page-options="[0]"
+      >
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn
